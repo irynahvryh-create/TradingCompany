@@ -6,48 +6,48 @@ using TradingCompany.DTO;
 
 namespace TradingCompany.DAL.Concrete
 {
-    public class CategoryDal : ICategoryDal
+    public class ManufacturerDal : IManufacturerDal
     {
         private readonly string _connStr;
 
-        public CategoryDal(string connStr)
+        public ManufacturerDal(string connStr)
         {
             _connStr = connStr;
         }
 
-        public Category Create(Category category)
+        public Manufacturer Create(Manufacturer manufacturer)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "INSERT INTO Category (Name, Status) OUTPUT inserted.CategoryID VALUES (@name, @status)";
-                cmd.Parameters.AddWithValue("@name", category.Name);
-                cmd.Parameters.AddWithValue("@status", category.Status);
+                cmd.CommandText = "INSERT INTO Manufacturer (Name, Country) OUTPUT inserted.ManufacturerID VALUES (@name, @country)";
+                cmd.Parameters.AddWithValue("@name", manufacturer.Name);
+                cmd.Parameters.AddWithValue("@country", manufacturer.Country);
 
-                category.CategoryID = (int)cmd.ExecuteScalar();
-                return category;
+                manufacturer.ManufacturerID = (int)cmd.ExecuteScalar();
+                return manufacturer;
             }
         }
 
-        public Category? GetById(int id)
+        public Manufacturer? GetById(int id)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "SELECT * FROM Category WHERE CategoryID = @id";
+                cmd.CommandText = "SELECT * FROM Manufacturer WHERE ManufacturerID = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        return new Category
+                        return new Manufacturer
                         {
-                            CategoryID = (int)reader["CategoryID"],
+                            ManufacturerID = (int)reader["ManufacturerID"],
                             Name = (string)reader["Name"],
-                            Status = (bool)reader["Status"]
+                            Country = (string)reader["Country"]
                         };
                     }
                 }
@@ -55,43 +55,43 @@ namespace TradingCompany.DAL.Concrete
             }
         }
 
-        public List<Category> GetAll()
+        public List<Manufacturer> GetAll()
         {
-            List<Category> categories = new List<Category>();
+            List<Manufacturer> manufacturers = new List<Manufacturer>();
 
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "SELECT * FROM Category";
+                cmd.CommandText = "SELECT * FROM Manufacturer";
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        categories.Add(new Category
+                        manufacturers.Add(new Manufacturer
                         {
-                            CategoryID = (int)reader["CategoryID"],
+                            ManufacturerID = (int)reader["ManufacturerID"],
                             Name = (string)reader["Name"],
-                            Status = (bool)reader["Status"]
+                            Country = (string)reader["Country"]
                         });
                     }
                 }
             }
 
-            return categories;
+            return manufacturers;
         }
 
-        public bool Update(Category category)
+        public bool Update(Manufacturer manufacturer)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "UPDATE Category SET Name = @name, Status = @status WHERE CategoryID = @id";
-                cmd.Parameters.AddWithValue("@name", category.Name);
-                cmd.Parameters.AddWithValue("@status", category.Status);
-                cmd.Parameters.AddWithValue("@id", category.CategoryID);
+                cmd.CommandText = "UPDATE Manufacturer SET Name = @name, Country = @country WHERE ManufacturerID = @id";
+                cmd.Parameters.AddWithValue("@name", manufacturer.Name);
+                cmd.Parameters.AddWithValue("@country", manufacturer.Country);
+                cmd.Parameters.AddWithValue("@id", manufacturer.ManufacturerID);
 
                 int affectedRows = cmd.ExecuteNonQuery();
                 return affectedRows == 1;
@@ -104,7 +104,7 @@ namespace TradingCompany.DAL.Concrete
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "DELETE FROM Category WHERE CategoryID = @id";
+                cmd.CommandText = "DELETE FROM Manufacturer WHERE ManufacturerID = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
                 int affectedRows = cmd.ExecuteNonQuery();
