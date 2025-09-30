@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TradingCompany.DAL.EF\TradingCompany.DAL.EF.csproj" />
     <ProjectReference Include="..\TradingCompany.DAL\TradingCompany.DAL.csproj" />
   </ItemGroup>
 
