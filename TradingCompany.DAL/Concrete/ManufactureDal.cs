@@ -1,27 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;
 
 namespace TradingCompany.DAL.Concrete
 {
-    public class ManufacturerDal : IManufacturerDal
+    public class ManufactureDal : IManufactureDal
     {
         private readonly string _connStr;
 
-        public ManufacturerDal(string connStr)
+        public ManufactureDal(string connStr)
         {
             _connStr = connStr;
         }
 
-        public Manufacturer Create(Manufacturer manufacturer)
+
+
+        public Manufacture Create(Manufacture manufacturer)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "INSERT INTO Manufacturer (Name, Country) OUTPUT inserted.ManufacturerID VALUES (@name, @country)";
+                cmd.CommandText = "INSERT INTO Manufacture (Name, Country) OUTPUT inserted.ManufacturerID VALUES (@name, @country)";
                 cmd.Parameters.AddWithValue("@name", manufacturer.Name);
                 cmd.Parameters.AddWithValue("@country", manufacturer.Country);
 
@@ -30,20 +35,20 @@ namespace TradingCompany.DAL.Concrete
             }
         }
 
-        public Manufacturer? GetById(int id)
+        public Manufacture? GetById(int id)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "SELECT * FROM Manufacturer WHERE ManufacturerID = @id";
+                cmd.CommandText = "SELECT * FROM Manufacture WHERE ManufacturerID = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        return new Manufacturer
+                        return new Manufacture
                         {
                             ManufacturerID = (int)reader["ManufacturerID"],
                             Name = (string)reader["Name"],
@@ -55,21 +60,21 @@ namespace TradingCompany.DAL.Concrete
             }
         }
 
-        public List<Manufacturer> GetAll()
+        public List<Manufacture> GetAll()
         {
-            List<Manufacturer> manufacturers = new List<Manufacturer>();
+            List<Manufacture> manufacturers = new List<Manufacture>();
 
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "SELECT * FROM Manufacturer";
+                cmd.CommandText = "SELECT * FROM Manufacture";
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        manufacturers.Add(new Manufacturer
+                        manufacturers.Add(new Manufacture
                         {
                             ManufacturerID = (int)reader["ManufacturerID"],
                             Name = (string)reader["Name"],
@@ -82,13 +87,13 @@ namespace TradingCompany.DAL.Concrete
             return manufacturers;
         }
 
-        public bool Update(Manufacturer manufacturer)
+        public bool Update(Manufacture manufacturer)
         {
             using (SqlConnection conn = new SqlConnection(_connStr))
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "UPDATE Manufacturer SET Name = @name, Country = @country WHERE ManufacturerID = @id";
+                cmd.CommandText = "UPDATE Manufacture SET Name = @name, Country = @country WHERE ManufacturerID = @id";
                 cmd.Parameters.AddWithValue("@name", manufacturer.Name);
                 cmd.Parameters.AddWithValue("@country", manufacturer.Country);
                 cmd.Parameters.AddWithValue("@id", manufacturer.ManufacturerID);
@@ -104,12 +109,15 @@ namespace TradingCompany.DAL.Concrete
             using (SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "DELETE FROM Manufacturer WHERE ManufacturerID = @id";
+                cmd.CommandText = "DELETE FROM Manufacture WHERE ManufacturerID = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
                 int affectedRows = cmd.ExecuteNonQuery();
                 return affectedRows == 1;
             }
         }
+
+       
     }
 }
+

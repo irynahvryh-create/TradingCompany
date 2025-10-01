@@ -1,15 +1,59 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System;
 using TradingCompany.DAL.Concrete;
 using TradingCompany.DAL.EF.Data;
+using TradingCompany.DAL.EF.MapperProfiles;
+using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;
 
-class Program
+
+
+partial class Program
 {
     static string connectionString = @"Data Source=localhost;Initial Catalog=TradingCompany_2;Integrated Security=True;Encrypt=False;";
     static CategoryDal categoryDal = new CategoryDal(connectionString);
+    static ManufactureDalEF manufacturerDalEF;
+    static ProductDalEF productsDalEF;
+
+
+    static CategoryDalEF categoryDalEF;
+    static IMapper _mapper;
+    static ILogger<Program> _logger;
 
     static void Main()
     {
+
+        // 🔹 КРОК 1. Створюємо LoggerFactory
+        using var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddConsole()
+                .SetMinimumLevel(LogLevel.Information);
+        });
+
+        // 🔹 Логер для Program
+        _logger = loggerFactory.CreateLogger<Program>();
+        _logger.LogInformation("Програма стартувала...");
+
+        // 🔹 КРОК 2. AutoMapper автоматично підтягує всі профілі з твоєї збірки
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddMaps(typeof(Category_Map).Assembly);
+        });
+
+        // Якщо є помилки в мапінгу — вони зловляться тут
+        config.AssertConfigurationIsValid();
+
+        _mapper = config.CreateMapper();
+
+        // 🔹 КРОК 3. Передаємо mapper у DAL
+        categoryDalEF = new CategoryDalEF(connectionString, _mapper);
+        manufacturerDalEF = new ManufactureDalEF(connectionString, _mapper);
+        productsDalEF = new ProductDalEF(connectionString, _mapper);
+
+
+
         Console.WriteLine("Hello :)");
 
         while (true)
@@ -34,6 +78,33 @@ class Program
                 case "5":
                     DeleteCategory();
                     break;
+                case "6":
+                    FindCategoryById_1();
+                    break;
+                case "7":
+                    ShowAllCategories_2();
+                    break;
+                case "8":
+                    ShowAllManufacturer();
+                    break;
+                case "9":
+                    ShowAllManufacturer_2();
+                    break;
+                case "10":
+                    UpdateCategory_2();
+                    break;
+                case "11":
+                    AddCategory_2();
+                    break;
+                    case "12":  
+                        DeleteCategory_2();
+                    break;
+                    case "13":
+                        ShowAllProdact();
+                    break;
+                    case "14":  
+                        ShowAllProducts_2();
+                    break;
                 case "0":
                     return;
                 default:
@@ -53,6 +124,15 @@ class Program
         Console.WriteLine("3. Find Category by ID");
         Console.WriteLine("4. Update Category");
         Console.WriteLine("5. Delete Category");
+        Console.WriteLine("6.  Find Category by ID()");
+        Console.WriteLine("7. Show All Categories(map)");
+        Console.WriteLine("8. ShowAllManufacturer");
+        Console.WriteLine("9. ShowAllManufacturer(map)");
+        Console.WriteLine("10. UpdateCategory_2()");
+        Console.WriteLine("11. AddCategory_2();");
+        Console.WriteLine("12. DeleteCategory_2();");
+        Console.WriteLine("13.ShowAllProdact() ");
+        Console.WriteLine("14. ShowAllProducts_2()");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
@@ -70,13 +150,13 @@ class Program
     }
 
     static void ShowAllCategories()
-{
-    var dal = new CategoryDalEF(connectionString); // просто створюємо об'єкт
-    var categories = dal.GetAll();
-    foreach (var cat in categories)
-        Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
-}
-
+    {
+        var dal = new CategoryDal(connectionString); // просто створюємо об'єкт
+        var categories = dal.GetAll();
+        foreach (var cat in categories)
+            Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
+    }
+    
 
     static void FindCategoryById()
     {
@@ -120,4 +200,130 @@ class Program
         else
             Console.WriteLine("Category not found");
     }
+
+
+
+
+
+
+
+
+
+    static void AddCategory_2()
+    {
+        Console.Write("Name: ");
+        string name = Console.ReadLine() ?? "";
+        Console.Write("Status (1=активний, 0=неактивний): ");
+        bool status = Console.ReadLine() == "1";
+
+        Category newCategory = new Category { Name = name, Status = status };
+        categoryDalEF.Create(newCategory);
+        Console.WriteLine($"Category added with ID {newCategory.CategoryID}");
+    }
+
+    static void ShowAllCategories_2()
+    {
+        var categories = categoryDalEF.GetAll();
+        foreach (var cat in categories)
+            Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
+    }
+
+    static void FindCategoryById_1()
+    {
+        Console.Write("ID: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+        var catById = categoryDalEF.GetById(id);
+        if (catById != null)
+            Console.WriteLine($"{catById.CategoryID}: {catById.Name} ({(catById.Status ? "Активний" : "Неактивний")})");
+        else
+            Console.WriteLine("Category not found");
+    }
+    static void DeleteCategory_2()
+    {
+        Console.Write("ID to delete: ");
+        int delId = int.Parse(Console.ReadLine() ?? "0");
+
+        if (categoryDalEF.Delete(delId))
+            Console.WriteLine("Category deleted");
+        else
+            Console.WriteLine("Category not found");
+    }
+
+
+
+    static void UpdateCategory_2()
+    {
+        Console.Write("ID to update: ");
+        int updId = int.Parse(Console.ReadLine() ?? "0");
+        var updCat = categoryDalEF.GetById(updId);
+
+        if (updCat != null)
+        {
+            Console.Write("New name: ");
+            updCat.Name = Console.ReadLine() ?? updCat.Name;
+            Console.Write("New Status (1=активний, 0=неактивний): ");
+            updCat.Status = Console.ReadLine() == "1";
+            categoryDal.Update(updCat);
+            Console.WriteLine("Category updated");
+        }
+        else
+        {
+            Console.WriteLine("Category not found");
+        }
+    }
+
+
+
+ static void ShowAllManufacturer()
+    {
+        var dal = new ManufactureDal(connectionString); // просто створюємо об'єкт
+        var manufacturer = dal.GetAll();
+        foreach (var cat in manufacturer)
+            Console.WriteLine($"{cat.ManufacturerID}) {cat.Name} - {(cat.Country)}");
+    }
+    static void ShowAllManufacturer_2() 
+    { 
+    var manufacturer = manufacturerDalEF.GetAll();
+        foreach (var cat in manufacturer)
+            Console.WriteLine($"{cat.ManufacturerID}) {cat.Name} - {(cat.Country)}");
+    }
+
+
+
+    static void ShowAllProdact() { 
+    var dal = new ProductDal(connectionString); // просто створюємо об'єкт
+        var prodact = dal.GetAll();
+        foreach (var cat in prodact)
+            Console.WriteLine($"{cat.ProductID}) {cat.Name} - {(cat.PriceOut)} ,{cat.Status}");
+    }
+
+
+    static void ShowAllProducts_2()
+    {
+        var products = productsDalEF.GetAll(); // має повертати List<DTO.Product>
+
+        foreach (var p in products)
+        {
+            // Використовуємо властивості DTO
+            Console.WriteLine($"{p.ProductID}) {p.Name} - {p.PriceOut}, {(p.Status ? "Активний" : "Неактивний")}");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+

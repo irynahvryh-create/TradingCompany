@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TradingCompany.DTO
 {
-    public class Manufacturer
+    public class Manufacture
     {
         public int ManufacturerID { get; set; }
         public string Name { get; set; } = string.Empty;
