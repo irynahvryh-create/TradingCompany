@@ -114,6 +114,9 @@ partial class Program
                     case "16":
                         ShowAllProductLog_2();
                     break;
+                    case "17":
+                        AddProductLog();
+                    break;
                 case "0":
                     return;
                 default:
@@ -144,6 +147,7 @@ partial class Program
         Console.WriteLine("14. ShowAllProducts_2()");
         Console.WriteLine("15.  ShowAllProductLog()");
         Console.WriteLine("16. ShowAllProductLog_2()");
+        Console.WriteLine("17AddProductLog()");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
@@ -324,7 +328,7 @@ partial class Program
 
 
 
-
+    /*
     static void ShowAllProductLog()
     {
         
@@ -334,6 +338,8 @@ partial class Program
             Console.WriteLine($"{cat.LogID}) {cat.ProductID} {(cat.OldPrice)}- {(cat.NewPrice)} ,{cat.Status}");
     
         }
+
+    */
     static void ShowAllProductLog_2()
     {
         var productLog = productLogDalEF.GetAll();
@@ -343,6 +349,46 @@ partial class Program
 
 
 
+    // Показати всі логи
+    static void ShowAllProductLog()
+    {
+        var logs = productLogDalEF.GetAll(); // productLogDalEF - твій DAL для ProductLog
+
+        foreach (var log in logs)
+        {
+            Console.WriteLine($"{log.LogID}: ProductID={log.ProductID}, OldPrice={log.OldPrice}, NewPrice={log.NewPrice}, Status={(log.Status ? "Активний" : "Неактивний")}, Date={log.Date}");
+        }
+    }
+
+    // Додати новий лог
+    static void AddProductLog()
+    {
+        Console.Write("ProductID: ");
+        int productId = int.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("OldPrice: ");
+        decimal oldPrice = decimal.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("NewPrice: ");
+        decimal newPrice = decimal.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("Status (1=активний, 0=неактивний): ");
+        bool status = Console.ReadLine() == "1";
+
+        // Створюємо об'єкт DTO для DAL
+        var newLog = new TradingCompany.DTO.ProductLog
+        {
+            ProductID = productId,
+            OldPrice = oldPrice,
+            NewPrice = newPrice,
+            Status = status
+            // Date тут не вказуємо — база поставить автоматично
+        };
+
+        var createdLog = productLogDalEF.Create(newLog); // додаємо через DAL
+
+        Console.WriteLine($"Log додано з ID {createdLog.LogID}, дата: {createdLog.Date}");
+    }
 
 
 
