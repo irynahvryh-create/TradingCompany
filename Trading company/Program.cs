@@ -524,21 +524,38 @@ partial class Program
         Console.Write("Status (1=активний, 0=неактивний): ");
         bool status = Console.ReadLine() == "1";
 
-        // Створюємо об'єкт DTO для DAL
-        var newLog = new TradingCompany.DTO.ProductLog
+        try
         {
-            ProductID = productId,
-            OldPrice = oldPrice,
-            NewPrice = newPrice,
-            Status = status
-            // Date тут не вказуємо — база поставить автоматично
-        };
+            // Створюємо об'єкт DTO для DAL
+            var newLog = new TradingCompany.DTO.ProductLog
+            {
+                ProductID = productId,
+                OldPrice = oldPrice,
+                NewPrice = newPrice,
+                Status = status
+                // Date тут не вказуємо — база поставить автоматично (default GETDATE())
+            };
 
-        var createdLog = productLogDalEF.Create(newLog); // додаємо через DAL
+            var createdLog = productLogDalEF.Create(newLog); // додаємо через DAL
 
-        Console.WriteLine($"Log додано з ID {createdLog.LogID}, дата: {createdLog.Date}");
+            Console.WriteLine($"Log додано з ID {createdLog.LogID}, дата: {createdLog.Date}");
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Помилка при додаванні логу. Перевірте, чи існує продукт з таким ID.");
+            Console.ResetColor();
+            Console.WriteLine($"Деталі: {ex.InnerException?.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Сталася помилка: " + ex.Message);
+            Console.ResetColor();
+        }
     }
-    
+
+
     static void ShowAllProductLog_2()
     {
         var productLog = productLogDalEF.GetAll();
