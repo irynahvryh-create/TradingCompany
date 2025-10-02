@@ -117,9 +117,43 @@ partial class Program
                     case "17":
                         AddProductLog();
                     break;
+                    case "18":
+                    FindProductById();
+                    break;
+                    case "19":
+                    UpdateProduct();
+                    break;
+                    case "20":
+                        AddProduct();
+                    break;
+                    case "21":
+                        DeleteProduct();
+                    break;
+                    case "22":
+                        FindManufacturerById();
+                    break;
+                    case "23":
+                        UpdateManufacturer();
+                    break;
+                    case "24":
+                        DeleteManufacturer();
+                    break;
+                    case "25":
+                    AddManufacture();
+                    break;
+                    case "26":
+                        FindProductLogById();   
+                    break;
+                    case "27":
+                        UpdateProductLog();
+                    break;
+                    case "28":
+                        DeleteProductLog();
+                    break;
+
                 case "0":
                     return;
-                default:
+                    default:
                     Console.WriteLine("Invalid selection");
                     break;
             }
@@ -143,11 +177,24 @@ partial class Program
         Console.WriteLine("10. UpdateCategory_2()");
         Console.WriteLine("11. AddCategory_2();");
         Console.WriteLine("12. DeleteCategory_2();");
-        Console.WriteLine("13.ShowAllProdact() ");
+        Console.WriteLine("13. ShowAllProdact() ");
         Console.WriteLine("14. ShowAllProducts_2()");
-        Console.WriteLine("15.  ShowAllProductLog()");
+        Console.WriteLine("15. ShowAllProductLog()");
         Console.WriteLine("16. ShowAllProductLog_2()");
-        Console.WriteLine("17AddProductLog()");
+        Console.WriteLine("17. AddProductLog");
+        Console.WriteLine("18. FindProductById");
+        Console.WriteLine("19. UpdateProduct");
+        Console.WriteLine("20. AddProduct");
+        Console.WriteLine("21. DeleteProduct");
+        Console.WriteLine("22. FindManufacturerById");
+        Console.WriteLine("23. UpdateManufacturer");
+        Console.WriteLine("24. DeleteManufacturer");
+        Console.WriteLine("25. AddManufacture()");
+        Console.WriteLine("26. AddManufacture()");
+        Console.WriteLine("27. AddManufacture()");
+        Console.WriteLine("28. AddManufacture()");
+
+        Console.WriteLine("");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
@@ -164,6 +211,19 @@ partial class Program
         Console.WriteLine($"Category added with ID {newCategory.CategoryID}");
     }
 
+    static void AddCategory_2()
+    {
+        Console.Write("Name: ");
+        string name = Console.ReadLine() ?? "";
+        Console.Write("Status (1=активний, 0=неактивний): ");
+        bool status = Console.ReadLine() == "1";
+
+        Category newCategory = new Category { Name = name, Status = status };
+        categoryDalEF.Create(newCategory);
+        Console.WriteLine($"Category added with ID {newCategory.CategoryID}");
+    }
+
+
     static void ShowAllCategories()
     {
         var dal = new CategoryDal(connectionString); // просто створюємо об'єкт
@@ -171,7 +231,14 @@ partial class Program
         foreach (var cat in categories)
             Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
     }
-    
+
+    static void ShowAllCategories_2()
+    {
+        var categories = categoryDalEF.GetAll();
+        foreach (var cat in categories)
+            Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
+    }
+
 
     static void FindCategoryById()
     {
@@ -183,12 +250,42 @@ partial class Program
         else
             Console.WriteLine("Category not found");
     }
-
+    static void FindCategoryById_1()
+    {
+        Console.Write("ID: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+        var catById = categoryDalEF.GetById(id);
+        if (catById != null)
+            Console.WriteLine($"{catById.CategoryID}: {catById.Name} ({(catById.Status ? "Активний" : "Неактивний")})");
+        else
+            Console.WriteLine("Category not found");
+    }
+   
     static void UpdateCategory()
     {
         Console.Write("ID to update: ");
         int updId = int.Parse(Console.ReadLine() ?? "0");
         var updCat = categoryDal.GetById(updId);
+
+        if (updCat != null)
+        {
+            Console.Write("New name: ");
+            updCat.Name = Console.ReadLine() ?? updCat.Name;
+            Console.Write("New Status (1=активний, 0=неактивний): ");
+            updCat.Status = Console.ReadLine() == "1";
+            categoryDal.Update(updCat);
+            Console.WriteLine("Category updated");
+        }
+        else
+        {
+            Console.WriteLine("Category not found");
+        }
+    }
+    static void UpdateCategory_2()
+    {
+        Console.Write("ID to update: ");
+        int updId = int.Parse(Console.ReadLine() ?? "0");
+        var updCat = categoryDalEF.GetById(updId);
 
         if (updCat != null)
         {
@@ -215,44 +312,6 @@ partial class Program
         else
             Console.WriteLine("Category not found");
     }
-
-
-
-
-
-
-
-
-
-    static void AddCategory_2()
-    {
-        Console.Write("Name: ");
-        string name = Console.ReadLine() ?? "";
-        Console.Write("Status (1=активний, 0=неактивний): ");
-        bool status = Console.ReadLine() == "1";
-
-        Category newCategory = new Category { Name = name, Status = status };
-        categoryDalEF.Create(newCategory);
-        Console.WriteLine($"Category added with ID {newCategory.CategoryID}");
-    }
-
-    static void ShowAllCategories_2()
-    {
-        var categories = categoryDalEF.GetAll();
-        foreach (var cat in categories)
-            Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
-    }
-
-    static void FindCategoryById_1()
-    {
-        Console.Write("ID: ");
-        int id = int.Parse(Console.ReadLine() ?? "0");
-        var catById = categoryDalEF.GetById(id);
-        if (catById != null)
-            Console.WriteLine($"{catById.CategoryID}: {catById.Name} ({(catById.Status ? "Активний" : "Неактивний")})");
-        else
-            Console.WriteLine("Category not found");
-    }
     static void DeleteCategory_2()
     {
         Console.Write("ID to delete: ");
@@ -264,32 +323,136 @@ partial class Program
             Console.WriteLine("Category not found");
     }
 
-
-
-    static void UpdateCategory_2()
+    static void AddProduct()
     {
-        Console.Write("ID to update: ");
-        int updId = int.Parse(Console.ReadLine() ?? "0");
-        var updCat = categoryDalEF.GetById(updId);
+        Console.Write("Name: ");
+        string name = Console.ReadLine() ?? "";
 
-        if (updCat != null)
+        Console.Write("CategoryID: ");
+        int categoryId = int.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("ManufacturerID: ");
+        int manufacturerId = int.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("PriceOut: ");
+        decimal priceOut = decimal.Parse(Console.ReadLine() ?? "0");
+        Console.Write("PriceIn: ");
+        decimal priceIn = decimal.Parse(Console.ReadLine() ?? "0");
+
+        Console.Write("Status (1=активний, 0=неактивний): ");
+        bool status = Console.ReadLine() == "1";
+
+        var newProduct = new TradingCompany.DTO.Product
         {
-            Console.Write("New name: ");
-            updCat.Name = Console.ReadLine() ?? updCat.Name;
-            Console.Write("New Status (1=активний, 0=неактивний): ");
-            updCat.Status = Console.ReadLine() == "1";
-            categoryDal.Update(updCat);
-            Console.WriteLine("Category updated");
-        }
-        else
+            Name = name,
+            CategoryID = categoryId,
+            ManufacturerID = manufacturerId,
+            PriceOut = priceOut,
+            PriceIn = priceIn,
+            Status = status
+        };
+
+        var created = productsDalEF.Create(newProduct);
+        Console.WriteLine($"Product added with ID {created.ProductID}");
+    }
+
+    static void ShowAllProdact()
+    {
+        var dal = new ProductDal(connectionString); // просто створюємо об'єкт
+        var prodact = dal.GetAll();
+        foreach (var cat in prodact)
+            Console.WriteLine($"{cat.ProductID}) {cat.Name} - {(cat.PriceOut)} ,{cat.Status}");
+    }
+    static void ShowAllProducts_2()
+    {
+        var products = productsDalEF.GetAll(); // має повертати List<DTO.Product>
+
+        foreach (var p in products)
         {
-            Console.WriteLine("Category not found");
+            // Використовуємо властивості DTO
+            Console.WriteLine($"{p.ProductID}) {p.Name} - {p.PriceOut}, {(p.Status ? "Активний" : "Неактивний")}");
         }
     }
 
+    static void FindProductById()
+    {
+        Console.Write("ProductID: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        var product = productsDalEF.GetById(id);
+        if (product != null)
+            Console.WriteLine($"{product.ProductID}) {product.Name} - {product.PriceOut}, {(product.Status ? "Активний" : "Неактивний")}");
+        else
+            Console.WriteLine("Product not found");
+    }
+    
+    static void UpdateProduct()
+    {
+        Console.Write("ProductID to update: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        var product = productsDalEF.GetById(id);
+        if (product != null)
+        {
+            Console.Write("New name: ");
+            product.Name = Console.ReadLine() ?? product.Name;
+
+            Console.Write("New CategoryID: ");
+            product.CategoryID = int.Parse(Console.ReadLine() ?? product.CategoryID.ToString());
+
+            Console.Write("New ManufacturerID: ");
+            product.ManufacturerID = int.Parse(Console.ReadLine() ?? product.ManufacturerID.ToString());
+
+            Console.Write("New PriceOut: ");
+            product.PriceOut = decimal.Parse(Console.ReadLine() ?? product.PriceOut.ToString());
+
+            Console.Write("New PriceIn: ");
+            product.PriceIn = decimal.Parse(Console.ReadLine() ?? product.PriceIn.ToString());
+
+            Console.Write("New Status (1=активний, 0=неактивний): ");
+            product.Status = Console.ReadLine() == "1";
+
+            productsDalEF.Update(product);
+            Console.WriteLine("Product updated");
+        }
+        else
+        {
+            Console.WriteLine("Product not found");
+        }
+    }
+
+    static void DeleteProduct()
+    {
+        Console.Write("ProductID to delete: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        if (productsDalEF.Delete(id))
+            Console.WriteLine("Product deleted");
+        else
+            Console.WriteLine("Product not found");
+    }
 
 
- static void ShowAllManufacturer()
+    // Додати нового виробника
+    static void AddManufacture()
+    {
+        Console.Write("Name: ");
+        string name = Console.ReadLine() ?? "";
+
+        Console.Write("Country: ");
+        string country = Console.ReadLine() ?? "";
+
+        var newManufacturer = new TradingCompany.DTO.Manufacture
+        {
+            Name = name,
+            Country = country
+        };
+
+        manufacturerDalEF.Create(newManufacturer);
+        Console.WriteLine($"Виробника додано з ID {newManufacturer.ManufacturerID}");
+    }
+
+    static void ShowAllManufacturer()
     {
         var dal = new ManufactureDal(connectionString); // просто створюємо об'єкт
         var manufacturer = dal.GetAll();
@@ -303,64 +466,55 @@ partial class Program
             Console.WriteLine($"{cat.ManufacturerID}) {cat.Name} - {(cat.Country)}");
     }
 
-
-
-    static void ShowAllProdact() { 
-    var dal = new ProductDal(connectionString); // просто створюємо об'єкт
-        var prodact = dal.GetAll();
-        foreach (var cat in prodact)
-            Console.WriteLine($"{cat.ProductID}) {cat.Name} - {(cat.PriceOut)} ,{cat.Status}");
-    }
-
-
-    static void ShowAllProducts_2()
+    static void FindManufacturerById()
     {
-        var products = productsDalEF.GetAll(); // має повертати List<DTO.Product>
+        Console.Write("ID виробника: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
 
-        foreach (var p in products)
+        var manufacturer = manufacturerDalEF.GetById(id);
+        if (manufacturer != null)
+            Console.WriteLine($"{manufacturer.ManufacturerID}) {manufacturer.Name} - {manufacturer.Country}");
+        else
+            Console.WriteLine("Виробника не знайдено");
+    }
+    static void UpdateManufacturer()
+    {
+        Console.Write("ID виробника для оновлення: ");
+        int updId = int.Parse(Console.ReadLine() ?? "0");
+
+        var updManufacturer = manufacturerDalEF.GetById(updId);
+        if (updManufacturer != null)
         {
-            // Використовуємо властивості DTO
-            Console.WriteLine($"{p.ProductID}) {p.Name} - {p.PriceOut}, {(p.Status ? "Активний" : "Неактивний")}");
+            Console.Write("Нова назва: ");
+            updManufacturer.Name = Console.ReadLine() ?? updManufacturer.Name;
+
+            Console.Write("Нова країна: ");
+            updManufacturer.Country = Console.ReadLine() ?? updManufacturer.Country;
+
+            manufacturerDalEF.Update(updManufacturer);
+            Console.WriteLine("Виробника оновлено ");
         }
-    }
-
-
-
-
-
-    /*
-    static void ShowAllProductLog()
-    {
-        
-       var dal = new ProductLogDal(connectionString); // просто створюємо об'єкт
-        var productLog = dal.GetAll();
-        foreach (var cat in productLog)
-            Console.WriteLine($"{cat.LogID}) {cat.ProductID} {(cat.OldPrice)}- {(cat.NewPrice)} ,{cat.Status}");
-    
-        }
-
-    */
-    static void ShowAllProductLog_2()
-    {
-        var productLog = productLogDalEF.GetAll();
-        foreach (var cat in productLog)
-            Console.WriteLine($"{cat.LogID}) {cat.ProductID} ,{(cat.OldPrice)}- {(cat.NewPrice)} ,{cat.Status}");
-    }
-
-
-
-    // Показати всі логи
-    static void ShowAllProductLog()
-    {
-        var logs = productLogDalEF.GetAll(); // productLogDalEF - твій DAL для ProductLog
-
-        foreach (var log in logs)
+        else
         {
-            Console.WriteLine($"{log.LogID}: ProductID={log.ProductID}, OldPrice={log.OldPrice}, NewPrice={log.NewPrice}, Status={(log.Status ? "Активний" : "Неактивний")}, Date={log.Date}");
+            Console.WriteLine("Виробника не знайдено");
         }
     }
+    static void DeleteManufacturer()
+    {
+        Console.Write("ID виробника для видалення: ");
+        int delId = int.Parse(Console.ReadLine() ?? "0");
 
-    // Додати новий лог
+        if (manufacturerDalEF.Delete(delId))
+            Console.WriteLine("Виробника видалено ");
+        else
+            Console.WriteLine("Виробника не знайдено");
+    }
+
+
+
+
+
+
     static void AddProductLog()
     {
         Console.Write("ProductID: ");
@@ -389,11 +543,87 @@ partial class Program
 
         Console.WriteLine($"Log додано з ID {createdLog.LogID}, дата: {createdLog.Date}");
     }
+    
+    static void ShowAllProductLog_2()
+    {
+        var productLog = productLogDalEF.GetAll();
+        foreach (var cat in productLog)
+             Console.WriteLine($"{cat.LogID}: ProductID={cat.ProductID}, OldPrice={cat.OldPrice}, NewPrice={cat.NewPrice}, Status={(cat.Status ? "Активний" : "Неактивний")}, Date={cat.Date}");
+    }
+    static void ShowAllProductLog()
+    {
+        var logs = productLogDalEF.GetAll(); 
+
+        foreach (var log in logs)
+        {
+            Console.WriteLine($"{log.LogID}: ProductID={log.ProductID}, OldPrice={log.OldPrice}, NewPrice={log.NewPrice}, Status={(log.Status ? "Активний" : "Неактивний")}, Date={log.Date}");
+        }
+    }
+
+
+    // Знайти лог за ID
+    static void FindProductLogById()
+    {
+        Console.Write("LogID: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        var log = productLogDalEF.GetById(id);
+        if (log != null)
+        {
+            Console.WriteLine($"{log.LogID}: ProductID={log.ProductID}, OldPrice={log.OldPrice}, NewPrice={log.NewPrice}, Status={(log.Status ? "Активний" : "Неактивний")}, Date={log.Date}");
+        }
+        else
+        {
+            Console.WriteLine("Log not found");
+        }
+    }
+
+    // Оновити лог
+    static void UpdateProductLog()
+    {
+        Console.Write("LogID to update: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        var log = productLogDalEF.GetById(id);
+        if (log != null)
+        {
+            Console.Write("New OldPrice: ");
+            log.OldPrice = decimal.Parse(Console.ReadLine() ?? log.OldPrice.ToString());
+
+            Console.Write("New NewPrice: ");
+            log.NewPrice = decimal.Parse(Console.ReadLine() ?? log.NewPrice.ToString());
+
+            Console.Write("New Status (1=активний, 0=неактивний): ");
+            log.Status = Console.ReadLine() == "1";
+
+            productLogDalEF.Update(log);
+            Console.WriteLine("Log updated");
+        }
+        else
+        {
+            Console.WriteLine("Log not found");
+        }
+    }
+
+    // Видалити лог
+    static void DeleteProductLog()
+    {
+        Console.Write("LogID to delete: ");
+        int id = int.Parse(Console.ReadLine() ?? "0");
+
+        if (productLogDalEF.Delete(id))
+            Console.WriteLine("Log deleted");
+        else
+            Console.WriteLine("Log not found");
+    }
+
+
+
+
+
+
+
 
 
 
 }
-
-
-
-
