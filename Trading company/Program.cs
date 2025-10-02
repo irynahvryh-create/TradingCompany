@@ -15,6 +15,8 @@ partial class Program
     static CategoryDal categoryDal = new CategoryDal(connectionString);
     static ManufactureDalEF manufacturerDalEF;
     static ProductDalEF productsDalEF;
+    static ProductLogDal productLogDal = new ProductLogDal(connectionString);
+    static ProductLogDalEF productLogDalEF;
 
 
     static CategoryDalEF categoryDalEF;
@@ -51,6 +53,7 @@ partial class Program
         categoryDalEF = new CategoryDalEF(connectionString, _mapper);
         manufacturerDalEF = new ManufactureDalEF(connectionString, _mapper);
         productsDalEF = new ProductDalEF(connectionString, _mapper);
+        productLogDalEF = new ProductLogDalEF(connectionString, _mapper);
 
 
 
@@ -105,6 +108,12 @@ partial class Program
                     case "14":  
                         ShowAllProducts_2();
                     break;
+                    case "15":
+                        ShowAllProductLog();
+                    break;
+                    case "16":
+                        ShowAllProductLog_2();
+                    break;
                 case "0":
                     return;
                 default:
@@ -133,6 +142,8 @@ partial class Program
         Console.WriteLine("12. DeleteCategory_2();");
         Console.WriteLine("13.ShowAllProdact() ");
         Console.WriteLine("14. ShowAllProducts_2()");
+        Console.WriteLine("15.  ShowAllProductLog()");
+        Console.WriteLine("16. ShowAllProductLog_2()");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
@@ -314,8 +325,21 @@ partial class Program
 
 
 
-
-
+    static void ShowAllProductLog()
+    {
+        
+       var dal = new ProductLogDal(connectionString); // просто створюємо об'єкт
+        var productLog = dal.GetAll();
+        foreach (var cat in productLog)
+            Console.WriteLine($"{cat.LogID}) {cat.ProductID} {(cat.OldPrice)}- {(cat.NewPrice)} ,{cat.Status}");
+    
+        }
+    static void ShowAllProductLog_2()
+    {
+        var productLog = productLogDalEF.GetAll();
+        foreach (var cat in productLog)
+            Console.WriteLine($"{cat.LogID}) {cat.ProductID} ,{(cat.OldPrice)}- {(cat.NewPrice)} ,{cat.Status}");
+    }
 
 
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trading company", "Trading company.csproj", "{14E959CF-19F1-443D-AEAE-D8FD45B8E410}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingCompany.DAL.EF", "..\TradingCompany.DAL.EF\TradingCompany.DAL.EF.csproj", "{5D313C4D-A1EE-484A-975D-1FF84437E76D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingCompany.DTO", "..\TradingCompany.DTO\TradingCompany.DTO.csproj", "{0CB646CE-7EF0-4F46-893C-5AFF1FECB84E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingCompany.Tests", "..\TradingCompany.Tests\TradingCompany.Tests.csproj", "{4EEC6C2B-C5BE-45DF-9C45-63FEA7DDFD4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0CB646CE-7EF0-4F46-893C-5AFF1FECB84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CB646CE-7EF0-4F46-893C-5AFF1FECB84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CB646CE-7EF0-4F46-893C-5AFF1FECB84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEC6C2B-C5BE-45DF-9C45-63FEA7DDFD4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEC6C2B-C5BE-45DF-9C45-63FEA7DDFD4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEC6C2B-C5BE-45DF-9C45-63FEA7DDFD4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEC6C2B-C5BE-45DF-9C45-63FEA7DDFD4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

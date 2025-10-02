@@ -9,7 +9,7 @@ using TradingCompany.DTO;
 
 namespace TradingCompany.DAL.EF.Data
 {
-    public class ProductLogDalEF : IProductLogDal
+    public  class ProductLogDalEF : IProductLogDal
     {
         private readonly string _connStr;
         private readonly IMapper _mapper;
