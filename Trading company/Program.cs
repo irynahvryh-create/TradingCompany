@@ -26,7 +26,7 @@ partial class Program
     static void Main()
     {
 
-        // 🔹 КРОК 1. Створюємо LoggerFactory
+        // 
         using var loggerFactory = LoggerFactory.Create(builder =>
         {
             builder
@@ -34,22 +34,21 @@ partial class Program
                 .SetMinimumLevel(LogLevel.Information);
         });
 
-        // 🔹 Логер для Program
+        //
         _logger = loggerFactory.CreateLogger<Program>();
         _logger.LogInformation("Програма стартувала...");
 
-        // 🔹 КРОК 2. AutoMapper автоматично підтягує всі профілі з твоєї збірки
+        // 
         var config = new MapperConfiguration(cfg =>
         {
             cfg.AddMaps(typeof(Category_Map).Assembly);
         });
 
-        // Якщо є помилки в мапінгу — вони зловляться тут
         config.AssertConfigurationIsValid();
 
         _mapper = config.CreateMapper();
 
-        // 🔹 КРОК 3. Передаємо mapper у DAL
+        // 
         categoryDalEF = new CategoryDalEF(connectionString, _mapper);
         manufacturerDalEF = new ManufactureDalEF(connectionString, _mapper);
         productsDalEF = new ProductDalEF(connectionString, _mapper);
