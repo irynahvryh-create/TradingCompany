@@ -198,7 +198,7 @@ partial class Program
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
-
+    //
     static void AddCategory()
     {
         Console.Write("Name: ");
@@ -323,6 +323,7 @@ partial class Program
             Console.WriteLine("Category not found");
     }
 
+    //
     static void AddProduct()
     {
         Console.Write("Name: ");
@@ -433,7 +434,7 @@ partial class Program
     }
 
 
-    // Додати нового виробника
+    //
     static void AddManufacture()
     {
         Console.Write("Name: ");
@@ -510,11 +511,7 @@ partial class Program
             Console.WriteLine("Виробника не знайдено");
     }
 
-
-
-
-
-
+    //
     static void AddProductLog()
     {
         Console.Write("ProductID: ");
@@ -560,8 +557,6 @@ partial class Program
         }
     }
 
-
-    // Знайти лог за ID
     static void FindProductLogById()
     {
         Console.Write("LogID: ");
@@ -578,7 +573,6 @@ partial class Program
         }
     }
 
-    // Оновити лог
     static void UpdateProductLog()
     {
         Console.Write("LogID to update: ");
@@ -605,7 +599,6 @@ partial class Program
         }
     }
 
-    // Видалити лог
     static void DeleteProductLog()
     {
         Console.Write("LogID to delete: ");
@@ -616,14 +609,6 @@ partial class Program
         else
             Console.WriteLine("Log not found");
     }
-
-
-
-
-
-
-
-
 
 
 }
