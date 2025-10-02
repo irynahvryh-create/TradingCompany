@@ -70,87 +70,88 @@ partial class Program
                     AddCategory();
                     break;
                 case "2":
-                    ShowAllCategories();
+                    AddCategory_2();
                     break;
                 case "3":
-                    FindCategoryById();
+                    ShowAllCategories();
                     break;
                 case "4":
-                    UpdateCategory();
+                    ShowAllCategories_2();
                     break;
                 case "5":
-                    DeleteCategory();
+                    FindCategoryById();
                     break;
                 case "6":
                     FindCategoryById_1();
                     break;
                 case "7":
-                    ShowAllCategories_2();
+                    UpdateCategory();
                     break;
                 case "8":
-                    ShowAllManufacturer();
-                    break;
-                case "9":
-                    ShowAllManufacturer_2();
-                    break;
-                case "10":
                     UpdateCategory_2();
                     break;
+                case "9":
+                    DeleteCategory();
+                    break;
+                case "10":  
+                    DeleteCategory_2();
+                    break;
                 case "11":
-                    AddCategory_2();
-                    break;
-                    case "12":  
-                        DeleteCategory_2();
-                    break;
-                    case "13":
-                        ShowAllProdact();
-                    break;
-                    case "14":  
-                        ShowAllProducts_2();
-                    break;
-                    case "15":
-                        ShowAllProductLog();
-                    break;
-                    case "16":
-                        ShowAllProductLog_2();
-                    break;
-                    case "17":
-                        AddProductLog();
-                    break;
-                    case "18":
-                    FindProductById();
-                    break;
-                    case "19":
-                    UpdateProduct();
-                    break;
-                    case "20":
                         AddProduct();
                     break;
-                    case "21":
+                case "12":
+                        ShowAllProdact();
+                    break;
+                case "13":  
+                        ShowAllProducts_2();
+                    break; 
+                
+                case "14":
+                    FindProductById();
+                    break;
+                case "15":
+                    UpdateProduct();
+                    break;
+               
+                case "16":
                         DeleteProduct();
                     break;
-                    case "22":
-                        FindManufacturerById();
-                    break;
-                    case "23":
-                        UpdateManufacturer();
-                    break;
-                    case "24":
-                        DeleteManufacturer();
-                    break;
-                    case "25":
+                case "17":
                     AddManufacture();
                     break;
-                    case "26":
+                case "18":
+                    ShowAllManufacturer();
+                    break;
+                case "19":
+                    ShowAllManufacturer_2();
+                    break;
+                case "20":
+                        FindManufacturerById();
+                    break;
+                case "21":
+                        UpdateManufacturer();
+                    break;
+                case "22":
+                        DeleteManufacturer();
+                    break;
+                case "23":
+                        AddProductLog();
+                    break;
+                case "24":
+                        ShowAllProductLog();
+                    break;
+                case "25":
+                        ShowAllProductLog_2();
+                    break;
+                case "26":
                         FindProductLogById();   
                     break;
-                    case "27":
+                case "27":
                         UpdateProductLog();
                     break;
-                    case "28":
+                case "28":
                         DeleteProductLog();
                     break;
-
                 case "0":
                     return;
                     default:
@@ -166,35 +167,33 @@ partial class Program
     {
         Console.WriteLine("Available options:");
         Console.WriteLine("1. Add Category");
-        Console.WriteLine("2. Show All Categories");
-        Console.WriteLine("3. Find Category by ID");
-        Console.WriteLine("4. Update Category");
-        Console.WriteLine("5. Delete Category");
-        Console.WriteLine("6.  Find Category by ID()");
-        Console.WriteLine("7. Show All Categories(map)");
-        Console.WriteLine("8. ShowAllManufacturer");
-        Console.WriteLine("9. ShowAllManufacturer(map)");
-        Console.WriteLine("10. UpdateCategory_2()");
-        Console.WriteLine("11. AddCategory_2();");
-        Console.WriteLine("12. DeleteCategory_2();");
-        Console.WriteLine("13. ShowAllProdact() ");
-        Console.WriteLine("14. ShowAllProducts_2()");
-        Console.WriteLine("15. ShowAllProductLog()");
-        Console.WriteLine("16. ShowAllProductLog_2()");
-        Console.WriteLine("17. AddProductLog");
-        Console.WriteLine("18. FindProductById");
-        Console.WriteLine("19. UpdateProduct");
-        Console.WriteLine("20. AddProduct");
-        Console.WriteLine("21. DeleteProduct");
-        Console.WriteLine("22. FindManufacturerById");
-        Console.WriteLine("23. UpdateManufacturer");
-        Console.WriteLine("24. DeleteManufacturer");
-        Console.WriteLine("25. AddManufacture()");
-        Console.WriteLine("26. AddManufacture()");
-        Console.WriteLine("27. AddManufacture()");
-        Console.WriteLine("28. AddManufacture()");
-
-        Console.WriteLine("");
+        Console.WriteLine("2. AddCategory_2();");       
+        Console.WriteLine("3. Show All Categories");
+        Console.WriteLine("4. Show All Categories(map)");
+        Console.WriteLine("5. Find Category by ID");
+        Console.WriteLine("6. Find Category by ID_1");
+        Console.WriteLine("7. Update Category");
+        Console.WriteLine("8. UpdateCategory_2");
+        Console.WriteLine("9. Delete Category");
+        Console.WriteLine("10. DeleteCategory_2;");        
+        Console.WriteLine("11. AddProduct");
+        Console.WriteLine("12. ShowAllProdact ");
+        Console.WriteLine("13. ShowAllProducts_2");
+        Console.WriteLine("14. FindProductById");  
+        Console.WriteLine("15. UpdateProduct");
+        Console.WriteLine("16. DeleteProduct");
+        Console.WriteLine("17. AddManufacture()");
+        Console.WriteLine("18. ShowAllManufacturer");
+        Console.WriteLine("19. ShowAllManufacturer_2");
+        Console.WriteLine("20. FindManufacturerById");       
+        Console.WriteLine("21. UpdateManufacturer");
+        Console.WriteLine("22. DeleteManufacturer");
+        Console.WriteLine("23. AddProductLog");
+        Console.WriteLine("24. ShowAllProductLog()");
+        Console.WriteLine("25. ShowAllProductLog_2()");
+        Console.WriteLine("26. FindProductLogById()");        
+        Console.WriteLine("27. UpdateProductLog()");        
+        Console.WriteLine("28. DeleteProductLog");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
