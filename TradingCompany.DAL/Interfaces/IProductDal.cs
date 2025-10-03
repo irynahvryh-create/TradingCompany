@@ -9,10 +9,10 @@ namespace TradingCompany.DAL.Interfaces
 {
     public interface IProductDal
     {
-        Product Create(Product product);       // Створення нового продукту
-        Product? GetById(int id);              // Отримати продукт за ID
-        List<Product> GetAll();                // Отримати всі продукти
-        bool Update(Product product);          // Оновити дані продукту
-        bool Delete(int id);                   // Видалити продукт за ID
+        Product Create(Product product);       
+        Product? GetById(int id);             
+        List<Product> GetAll();                
+        bool Update(Product product);          
+        bool Delete(int id);                  
     }
 }

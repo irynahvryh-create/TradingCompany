@@ -9,10 +9,10 @@ namespace TradingCompany.DAL.Interfaces
 {
     public interface IManufactureDal
     {
-        Manufacture Create(Manufacture manufacture);       // Створення нового виробника
-        Manufacture? GetById(int id);                       // Отримати виробника за ID
-        List<Manufacture> GetAll();                         // Отримати всіх виробників
-        bool Update(Manufacture manufacture);              // Оновити дані виробника
-        bool Delete(int id);                               // Видалити виробника за ID
+        Manufacture Create(Manufacture manufacture);       
+        Manufacture? GetById(int id);                       
+        List<Manufacture> GetAll();                        
+        bool Update(Manufacture manufacture);              
+        bool Delete(int id);                               
     }
 }

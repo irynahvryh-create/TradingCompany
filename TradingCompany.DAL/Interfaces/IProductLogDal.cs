@@ -12,7 +12,7 @@ namespace TradingCompany.DAL.Interfaces
         ProductLog Create(ProductLog log);
         ProductLog? GetById(int id);
         List<ProductLog> GetAll();
-        List<ProductLog> GetByProductId(int productId); // отримати всі логи для конкретного продукту
+        List<ProductLog> GetByProductId(int productId); 
         bool Update(ProductLog log);
         bool Delete(int id);
     }

@@ -136,19 +136,17 @@ partial class Program
                 case "23":
                         AddProductLog();
                     break;
+               
                 case "24":
-                        ShowAllProductLog();
-                    break;
-                case "25":
                         ShowAllProductLog_2();
                     break;
-                case "26":
+                case "25":
                         FindProductLogById();   
                     break;
-                case "27":
+                case "26":
                         UpdateProductLog();
                     break;
-                case "28":
+                case "27":
                         DeleteProductLog();
                     break;
                 case "0":
@@ -188,11 +186,10 @@ partial class Program
         Console.WriteLine("21. UpdateManufacturer");
         Console.WriteLine("22. DeleteManufacturer");
         Console.WriteLine("23. AddProductLog");
-        Console.WriteLine("24. ShowAllProductLog()");
-        Console.WriteLine("25. ShowAllProductLog_2()");
-        Console.WriteLine("26. FindProductLogById()");        
-        Console.WriteLine("27. UpdateProductLog()");        
-        Console.WriteLine("28. DeleteProductLog");
+        Console.WriteLine("24. ShowAllProductLog");
+        Console.WriteLine("25. FindProductLogById()");        
+        Console.WriteLine("26. UpdateProductLog()");        
+        Console.WriteLine("27. DeleteProductLog");
         Console.WriteLine("0. Exit");
         Console.Write("Your selection: ");
     }
@@ -562,15 +559,8 @@ partial class Program
         foreach (var cat in productLog)
              Console.WriteLine($"{cat.LogID}: ProductID={cat.ProductID}, OldPrice={cat.OldPrice}, NewPrice={cat.NewPrice}, Status={(cat.Status ? "Активний" : "Неактивний")}, Date={cat.Date}");
     }
-    static void ShowAllProductLog()
-    {
-        var logs = productLogDalEF.GetAll(); 
-
-        foreach (var log in logs)
-        {
-            Console.WriteLine($"{log.LogID}: ProductID={log.ProductID}, OldPrice={log.OldPrice}, NewPrice={log.NewPrice}, Status={(log.Status ? "Активний" : "Неактивний")}, Date={log.Date}");
-        }
-    }
+    
+    
 
     static void FindProductLogById()
     {
