@@ -221,7 +221,7 @@ partial class Program
 
     static void ShowAllCategories()
     {
-        var dal = new CategoryDal(connectionString); // просто створюємо об'єкт
+        var dal = new CategoryDal(connectionString); 
         var categories = dal.GetAll();
         foreach (var cat in categories)
             Console.WriteLine($"{cat.CategoryID}: {cat.Name} ({(cat.Status ? "Активний" : "Неактивний")})");
