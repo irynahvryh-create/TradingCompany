@@ -114,7 +114,7 @@ namespace TradingCompany.Tests
         [Test]
         public void GetById_NonExistingId_ShouldReturnNull()
         {
-            int nonExistingId = 999999; // Який точно не існує в базі
+            int nonExistingId = 999999; 
             var result = _dalEF.GetById(nonExistingId);
             Assert.IsNull(result);
         }
