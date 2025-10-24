@@ -16,14 +16,14 @@ public class CategoryTests
     [SetUp]
     public void Setup()
     {
-        // Налаштування AutoMapper
+        
         var config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<DAL.EF.Models.Category, DTO.Category>().ReverseMap();
         });
         _mapper = config.CreateMapper();
 
-        // Ініціалізація DAL для тестової бази
+        
         _dalEF = new CategoryDalEF(_connStr, _mapper);
     }
 
