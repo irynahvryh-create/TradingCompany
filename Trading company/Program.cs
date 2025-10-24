@@ -361,11 +361,10 @@ partial class Program
     }
     static void ShowAllProducts_2()
     {
-        var products = productsDalEF.GetAll(); // має повертати List<DTO.Product>
+        var products = productsDalEF.GetAll(); 
 
         foreach (var p in products)
         {
-            // Використовуємо властивості DTO
             Console.WriteLine($"{p.ProductID}) {p.Name} - {p.PriceOut}, {(p.Status ? "Активний" : "Неактивний")}");
         }
     }
