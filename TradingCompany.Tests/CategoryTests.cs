@@ -114,7 +114,7 @@ public class CategoryTests
     [Test]
     public void Delete_NonExisting_ShouldReturnFalse()
     {
-        var result = _dalEF.Delete(-999); // ID, якого немає
+        var result = _dalEF.Delete(-999); 
         Assert.IsFalse(result);
     }
 }
