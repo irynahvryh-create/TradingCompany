@@ -522,17 +522,17 @@ partial class Program
 
         try
         {
-            // Створюємо об'єкт DTO для DAL
+            
             var newLog = new TradingCompany.DTO.ProductLog
             {
                 ProductID = productId,
                 OldPrice = oldPrice,
                 NewPrice = newPrice,
                 Status = status
-                // Date тут не вказуємо — база поставить автоматично (default GETDATE())
+                
             };
 
-            var createdLog = productLogDalEF.Create(newLog); // додаємо через DAL
+            var createdLog = productLogDalEF.Create(newLog); 
 
             Console.WriteLine($"Log додано з ID {createdLog.LogID}, дата: {createdLog.Date}");
         }
