@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.EF.Models;
 using TradingCompany.DTO;
 using NUnit.Framework;
+using TradingCompany.DAL.EF.Concrete;
 
 namespace TradingCompany.Tests
 {

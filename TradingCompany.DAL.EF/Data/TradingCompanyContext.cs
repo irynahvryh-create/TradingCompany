@@ -15,7 +15,6 @@ public partial class TradingCompanyContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Manufacture> Manufactures { get; set; }
@@ -23,12 +22,40 @@ public partial class TradingCompanyContext : DbContext
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductLog> ProductLogs { get; set; }
+    public virtual DbSet<Privilege> Privileges { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserPrivilege> UserPrivileges { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=TradingCompany_2;Integrated Security=True;TrustServerCertificate=True;Encrypt=False");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=TradingCompany_2;Integrated Security=True;TrustServerCertificate=True;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Privilege>(entity =>
+        {
+            entity.Property(e => e.PrivilegeId).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.UserId).ValueGeneratedNever();
+            entity.Property(e => e.Password).IsFixedLength();
+        });
+
+        modelBuilder.Entity<UserPrivilege>(entity =>
+        {
+            entity.HasOne(d => d.Privilege).WithMany(p => p.UserPrivileges)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserPrivileges_Privileges");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserPrivileges)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserPrivileges_Users");
+        });
+
         modelBuilder.Entity<Manufacture>(entity =>
         {
             entity.HasKey(e => e.ManufacturerId).HasName("PK_Manufacturer");

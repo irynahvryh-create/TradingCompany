@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using TradingCompany.DAL.Concrete;
-using TradingCompany.DAL.EF.Data;
+using TradingCompany.DAL.EF.Concrete;
 using TradingCompany.DAL.EF.MapperProfiles;
 using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;

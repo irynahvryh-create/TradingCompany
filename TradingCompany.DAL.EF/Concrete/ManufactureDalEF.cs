@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TradingCompany.DAL.EF.Concrete;
+using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.EF.Models;
 using TradingCompany.DAL.Interfaces;
 
-namespace TradingCompany.DAL.EF.Data
+namespace TradingCompany.DAL.EF.Concrete
 {
     public class ManufactureDalEF : IManufactureDal
     {
@@ -25,7 +25,7 @@ namespace TradingCompany.DAL.EF.Data
         {
             using (var context = new TradingCompanyContext())
             {
-                var entity = _mapper.Map<Models.Manufacture>(manufacture);
+                var entity = _mapper.Map<Manufacture>(manufacture);
                 context.Manufactures.Add(entity);
                 context.SaveChanges();
                 return _mapper.Map<DTO.Manufacture>(entity);

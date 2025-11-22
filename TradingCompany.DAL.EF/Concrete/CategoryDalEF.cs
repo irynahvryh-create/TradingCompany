@@ -6,10 +6,11 @@ using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
+using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;
 
-namespace TradingCompany.DAL.EF.Data
+namespace TradingCompany.DAL.EF.Concrete
 {
     public class CategoryDalEF : ICategoryDal
     {
@@ -25,7 +26,7 @@ namespace TradingCompany.DAL.EF.Data
         {
            using (var context = new TradingCompanyContext())
             {
-                var entity = _mapper.Map<TradingCompany.DAL.EF.Models.Category>(category);
+                var entity = _mapper.Map<Models.Category>(category);
                 context.Categories.Add(entity);
                 context.SaveChanges();
                 category.CategoryID = entity.CategoryId;

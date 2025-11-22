@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;
 
-namespace TradingCompany.DAL.EF.Data
+namespace TradingCompany.DAL.EF.Concrete
 {
     public partial class ProductDalEF : IProductDal
 
