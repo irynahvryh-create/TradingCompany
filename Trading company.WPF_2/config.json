@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "TradingCompanyDB": "Data Source=localhost;Initial Catalog=TradingCompany_2;Integrated Security=True;TrustServerCertificate=True"
+  }
+}

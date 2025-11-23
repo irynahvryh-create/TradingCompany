@@ -14,8 +14,8 @@ namespace TradingCompany.DAL.EF.MapperProfiles
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ReverseMap();
-            CreateMap< TradingCompany.DAL.EF.Models.Category , TradingCompany.DTO.Category>()
+             .ReverseMap();
+            CreateMap<TradingCompany.DAL.EF.Models.Category, TradingCompany.DTO.Category>()
                 .ForMember(dest => dest.CategoryID, opt => opt
                 .MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

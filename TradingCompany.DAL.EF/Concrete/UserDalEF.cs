@@ -5,10 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.EF.Models;
+using TradingCompany.DAL.Interfaces;
 
 namespace TradingCompany.DAL.EF.Concrete
 {
-    public class UserDalEF
+    public class UserDalEF : IUserDal
     {
 
         private readonly string _connStr;
@@ -86,6 +87,26 @@ namespace TradingCompany.DAL.EF.Concrete
                 var user = context.Users.SingleOrDefault(u => u.Login == username);
                 return user != null && user.Password.SequenceEqual(hash(password, user.Salt.ToString()));
             }
+        }
+
+        DTO.User IUserDal.CreateUser(string email, string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.User IUserDal.GetUserById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        DTO.User IUserDal.GetUserByLogin(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<DTO.User> IUserDal.GetUsers()
+        {
+            throw new NotImplementedException();
         }
 
         private byte[] hash(string password, string salt)
