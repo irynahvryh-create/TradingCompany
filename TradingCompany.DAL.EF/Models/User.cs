@@ -18,7 +18,7 @@ public partial class User
     [StringLength(50)]
     public string Email { get; set; } = null!;
 
-    [MaxLength(50)]
+    [MaxLength(64)]
     public byte[] Password { get; set; } = null!;
 
     public Guid Salt { get; set; }

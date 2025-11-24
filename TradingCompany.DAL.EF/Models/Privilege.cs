@@ -10,6 +10,7 @@ public partial class Privilege
 {
     [Key]
     [Column("PrivilegeID")]
+
     public int PrivilegeId { get; set; }
 
     [StringLength(50)]

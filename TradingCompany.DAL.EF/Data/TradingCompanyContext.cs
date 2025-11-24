@@ -41,7 +41,7 @@ public partial class TradingCompanyContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.Property(e => e.UserId).ValueGeneratedNever();
+            
             entity.Property(e => e.Password).IsFixedLength();
         });
 
@@ -54,6 +54,9 @@ public partial class TradingCompanyContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserPrivileges)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserPrivileges_Users");
+
+            entity.Property(e => e.RowInsertTime).HasDefaultValueSql("GETDATE()");
+
         });
 
         modelBuilder.Entity<Manufacture>(entity =>

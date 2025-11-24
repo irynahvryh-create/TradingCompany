@@ -32,12 +32,40 @@ namespace TradingCompany.WPF
         {
             Services = BuildServiceProvider();
 
+
+            //
+
+
+
+
+            // У OnStartup, перед loginWindow.ShowDialog()
+            var authManager = Services.GetRequiredService<IAuthManager>();
+            var adminUser = authManager.GetUserByLogin("admin");
+
+            if (adminUser == null)
+            {
+                // ✅ Цей виклик тепер спрацює, тому що SQL Server згенерує UserID
+                authManager.CreateUser(
+                    email: "admin@trading.com",
+                    username: "admin",
+                    password: "123456",
+                    privilegeType: TradingCompany.DTO.PrivilegeType.Admin
+                );
+                MessageBox.Show("Тестовий адміністратор створений!", "Успіх");
+            }
+
+
+
+            //
+
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             // Тут можна додати логін, якщо потрібна аутентифікація
             // Наприклад: var login = Services.GetRequiredService<Login>();
             // bool result = login.ShowDialog() ?? false;
-            bool result = true; // тимчасово дозволяємо одразу
+            //bool result = true; // тимчасово дозволяємо одразу
+            var loginWindow = Services.GetRequiredService<Login>();
+            bool result = loginWindow.ShowDialog() ?? false;
 
             if (result)
             {
@@ -49,6 +77,8 @@ namespace TradingCompany.WPF
             {
                 Current.Shutdown();
             }
+
+           
         }
 
         private static IServiceProvider BuildServiceProvider()
@@ -58,7 +88,8 @@ namespace TradingCompany.WPF
             // Logging
             services.AddLogging(builder =>
             {
-                builder.AddConsole().SetMinimumLevel(LogLevel.Information);
+                builder.AddConsole()
+                .SetMinimumLevel(LogLevel.Information);
             });
 
             // Конфігурація
@@ -68,12 +99,10 @@ namespace TradingCompany.WPF
             services.AddSingleton<IConfiguration>(configuration);
 
 
-            services.AddSingleton<IConfiguration>(configuration);
-
             // AutoMapper
             services.AddSingleton<IMapper>(sp =>
             {
-                // var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.ConstructServicesUsing(sp.GetService);
@@ -83,27 +112,39 @@ namespace TradingCompany.WPF
                 return config.CreateMapper();
             });
 
-            string connStr = configuration.GetConnectionString("TradingCompanyDB") ?? "";
+            string connStr = configuration.GetConnectionString("TradingCompanyDB") ??
+                throw new InvalidOperationException("Connection string 'TradingCompanyDB' not found in config.json.");
 
             // DAL реєстрації
+            services.AddTransient<IUserDal>(sp =>
+     new UserDalEF(connStr, sp.GetRequiredService<IMapper>()));
+            // <-- ДОДАТИ
+            services.AddTransient<IUserPrivilegeDal>(sp => new UserPrivilegeDalEF(connStr, sp.GetRequiredService<IMapper>())); // <-- ДОДАТИ
+
             services.AddTransient<ICategoryDal>(sp => new CategoryDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IProductDal>(sp => new ProductDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IManufactureDal>(sp => new ManufactureDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IProductLogDal>(sp => new ProductLogDalEF(connStr, sp.GetRequiredService<IMapper>()));
 
             // BL реєстрації
+            services.AddTransient<IAuthManager, AuthManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
             //services.AddTransient<IProductManager, ProductManager>();
             //services.AddTransient<IManufactureManager, ManufactureManager>();
             //services.AddTransient<IProductLogManager, ProductLogManager>();
 
             // ViewModels
+
+            services.AddTransient<LoginViewModel>();
+
             services.AddTransient<CategoryListViewModel>();
             services.AddTransient<CategoryDetailsViewModel>();
             //services.AddTransient<ProductListViewModel>();
             //services.AddTransient<ProductDetailsViewModel>();
 
             // Windows
+
+            services.AddTransient<Login>();
             services.AddTransient<CategoryListMVVM>();
             services.AddTransient<CategoryDetails>();
             //services.AddTransient<ProductListMVVM>();
