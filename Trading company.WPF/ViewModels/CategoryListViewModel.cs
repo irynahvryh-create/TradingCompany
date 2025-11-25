@@ -1,9 +1,10 @@
-﻿using TradingCompany.BL.Interfaces;
-using TradingCompany.DTO;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Windows.Input;
+using TradingCompany.BL.Interfaces;
+using TradingCompany.DTO;
 
 namespace TradingCompany.WPF.ViewModels
 {
@@ -49,9 +50,18 @@ namespace TradingCompany.WPF.ViewModels
             }
         }
 
+
+        //
+
+        public ICommand DeleteCommand { get; }
+
+        //
+
+
         public CategoryListViewModel(ICategoryManager categoryManager)
         {
             _categoryManager = categoryManager ?? throw new ArgumentNullException(nameof(categoryManager));
+           
             Refresh();
         }
 

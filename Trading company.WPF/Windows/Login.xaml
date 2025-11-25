@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="Login" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="42*"/>
+            <ColumnDefinition Width="135*"/>
+            <ColumnDefinition Width="14*"/>
+        </Grid.ColumnDefinitions>
 
 
 
@@ -15,11 +21,23 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel VerticalAlignment="Center" Grid.Row="0">
-            <TextBlock Text="Movie Database" HorizontalAlignment="Center" FontSize="20" />
+        <StackPanel VerticalAlignment="Center" Grid.ColumnSpan="4">
+            <StackPanel.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FFF0B594" Offset="0.254"/>
+                </RadialGradientBrush>
+            </StackPanel.Background>
+            <TextBlock HorizontalAlignment="Center" FontSize="20" Text=" Welcome " Background="#FFF0B594" />
         </StackPanel>
 
-        <Grid Grid.Row="1" >
+        <Grid Grid.Row="1" Grid.ColumnSpan="4" >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="1"/>
+                    <GradientStop Color="#FFFBD7B7" Offset="0.627"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
