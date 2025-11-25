@@ -9,7 +9,6 @@ namespace TradingCompany.DTO
     public enum PrivilegeType
     {
         Admin ,
-        Manager ,
         User 
     }
 }

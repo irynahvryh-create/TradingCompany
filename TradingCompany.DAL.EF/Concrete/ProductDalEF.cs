@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,18 @@ namespace TradingCompany.DAL.EF.Concrete
             _mapper = mapper;
         }
 
+        private TradingCompanyContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<TradingCompanyContext>()
+                .UseSqlServer(_connStr)
+                .Options;
+
+            return new TradingCompanyContext(options);
+        }
+
         public Product Create(Product product)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = _mapper.Map<Models.Product>(product); // DTO → Entity
                 context.Products.Add(entity);
@@ -35,7 +45,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Delete(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = context.Products.Find(id);
                 if (entity == null)
@@ -48,7 +58,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public List<Product> GetAll()
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entities = context.Products.ToList();
                 return _mapper.Map<List<Product>>(entities); // Entity → DTO
@@ -59,7 +69,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public Product? GetById(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = context.Products.Find(id);
                 return entity == null ? null : _mapper.Map<Product>(entity); // Entity → DTO
@@ -68,7 +78,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Update(Product product)
         {
-           using (var context = new TradingCompanyContext())
+           using (var context = CreateContext())
             {
                 var entity = context.Products.Find(product.ProductID);
                 if (entity == null)

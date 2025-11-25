@@ -10,7 +10,7 @@
         <StackPanel>
             <Button Content="Add Category" Click="AddButton_Click"/>
             <Button Content="Edit Category" Click="EditButton_Click"/>
-
+            <Button x:Name="DeleteButton" Content="Delete Category" Click="DeleteButton_Click" Margin="5"/>
 
 
 

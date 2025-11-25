@@ -36,26 +36,26 @@ namespace TradingCompany.BL.Concrete
             return _userDal.GetUserById(user.UserID);
         }
 
-        public string GetConnectionStatusTest()
-        {
-            try
-            {
-                // Викликаємо DAL для перевірки з'єднання
-                var users = _userDal.GetUsers();
+        //public string GetConnectionStatusTest()
+        //{
+        //    try
+        //    {
+        //        // Викликаємо DAL для перевірки з'єднання
+        //        var users = _userDal.GetUsers();
 
-                if (users == null || users.Count == 0)
-                {
-                    return "SUCCESS: Connected to DB. Users table is empty.";
-                }
+        //        if (users == null || users.Count == 0)
+        //        {
+        //            return "SUCCESS: Connected to DB. Users table is empty.";
+        //        }
 
-                return $"SUCCESS: Connected to DB. {users.Count} users found.";
-            }
-            catch (Exception ex)
-            {
-                // Якщо є помилка підключення
-                return $"ERROR: Connection failed! Details: {ex.Message}";
-            }
-        }
+        //        return $"SUCCESS: Connected to DB. {users.Count} users found.";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Якщо є помилка підключення
+        //        return $"ERROR: Connection failed! Details: {ex.Message}";
+        //    }
+        //}
 
         public User GetUserById(int id)
         {

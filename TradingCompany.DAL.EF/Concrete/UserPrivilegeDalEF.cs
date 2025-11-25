@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TradingCompany.DAL.EF.Data;
 using TradingCompany.DAL.EF.Models;
 using TradingCompany.DAL.Interfaces;
 using TradingCompany.DTO;
@@ -21,10 +22,18 @@ namespace TradingCompany.DAL.EF.Concrete
             _connStr = connStr;
             _mapper = mapper;
         }
+        private TradingCompanyContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<TradingCompanyContext>()
+                .UseSqlServer(_connStr)
+                .Options;
+
+            return new TradingCompanyContext(options);
+        }
 
         public void AddPrivilegeToUser(int userId, PrivilegeType privilegeType)
         {
-            using (var context = new Context(_connStr))
+            using (var context = CreateContext())
             {
                 var privilege = context.Privileges
                     .SingleOrDefault(p => p.Name == privilegeType.ToString());
@@ -38,7 +47,8 @@ namespace TradingCompany.DAL.EF.Concrete
                 {
                     UserId = userId,
                     PrivilegeId = privilege.PrivilegeId,
-               RowInsertTime = DateTime.UtcNow  };
+                    RowInsertTime = DateTime.UtcNow 
+                };
 
                 context.UserPrivileges.Add(userPrivilege);
                 context.SaveChanges();

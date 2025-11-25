@@ -21,9 +21,18 @@ namespace TradingCompany.DAL.EF.Concrete
             _mapper = mapper;
         }
 
+        private TradingCompanyContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<TradingCompanyContext>()
+                .UseSqlServer(_connStr)
+                .Options;
+
+            return new TradingCompanyContext(options);
+        }
+
         public DTO.Manufacture Create(DTO.Manufacture manufacture)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = _mapper.Map<Manufacture>(manufacture);
                 context.Manufactures.Add(entity);
@@ -34,7 +43,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Delete(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var manufacture = context.Manufactures.Find(id);
                 if (manufacture == null) return false;
@@ -47,7 +56,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public List<DTO.Manufacture> GetAll()
         {
-            using var context = new TradingCompanyContext();
+            using var context = CreateContext();
             var list = context.Manufactures
                               .Include(m => m.Products) // якщо потрібно завантажити продукти
                               .ToList();
@@ -56,7 +65,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public DTO.Manufacture? GetById(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var manufacture = context.Manufactures
                                          .Include(m => m.Products) // якщо потрібно завантажити продукти
@@ -67,7 +76,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Update(DTO.Manufacture manufacture)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var existingManufacture = context.Manufactures
                                                     .FirstOrDefault(m => m.ManufacturerId == manufacture.ManufacturerID);

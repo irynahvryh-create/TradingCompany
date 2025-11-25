@@ -58,5 +58,27 @@ namespace TradingCompany.WPF.Windows
             // Оновлюємо список після редагування
             _viewModel.Refresh();
         }
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.SelectedCategory == null)
+                return;
+
+            var result = MessageBox.Show($"Видалити категорію '{_viewModel.SelectedCategory.Name}'?",
+                                         "Підтвердження", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                bool success = _viewModel.DeleteSelectedCategory();
+                if (success)
+                {
+                    MessageBox.Show("Категорія видалена.", "Успіх");
+                    _viewModel.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("Не вдалося видалити категорію.", "Помилка");
+                }
+            }
+        }
+
     }
 }

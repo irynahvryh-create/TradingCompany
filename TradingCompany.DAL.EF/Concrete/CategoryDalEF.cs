@@ -22,9 +22,18 @@ namespace TradingCompany.DAL.EF.Concrete
             _mapper = mapper;
         }
 
+        private TradingCompanyContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<TradingCompanyContext>()
+                .UseSqlServer(_connStr)
+                .Options;
+
+            return new TradingCompanyContext(options);
+        }
+
         public Category Create(Category category)
         {
-           using (var context = new TradingCompanyContext())
+           using (var context = CreateContext())
             {
                 var entity = _mapper.Map<Models.Category>(category);
                 context.Categories.Add(entity);
@@ -36,7 +45,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Delete(int id)
         {
-           using (var context = new TradingCompanyContext())
+           using (var context = CreateContext())
             {
                 var category = context.Categories.Find(id);
                 if (category == null) return false;
@@ -48,7 +57,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public List<Category> GetAll()
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 return context.Categories.Select(
                     m=> new  Category
@@ -62,7 +71,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public Category? GetById(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var c= context.Categories.
                     Include(c=>c.Products).
@@ -76,7 +85,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Update(Category category)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var existingCategory = context.Categories.Find(category.CategoryID);
                 if (existingCategory == null) return false;

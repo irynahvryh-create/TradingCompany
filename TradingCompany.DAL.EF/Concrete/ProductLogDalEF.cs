@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,19 @@ namespace TradingCompany.DAL.EF.Concrete
             _mapper = mapper;
         }
 
+
+        private TradingCompanyContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<TradingCompanyContext>()
+                .UseSqlServer(_connStr)
+                .Options;
+
+            return new TradingCompanyContext(options);
+        }
+
         public ProductLog Create(ProductLog log)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = _mapper.Map<Models.ProductLog>(log);
                 context.ProductLogs.Add(entity);
@@ -33,7 +44,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Delete(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = context.ProductLogs.Find(id);
                 if (entity == null)
@@ -46,7 +57,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public List<ProductLog> GetAll()
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entities = context.ProductLogs.ToList();
                 return _mapper.Map<List<ProductLog>>(entities);
@@ -55,7 +66,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public ProductLog? GetById(int id)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = context.ProductLogs.Find(id);
                 return entity == null ? null : _mapper.Map<ProductLog>(entity);
@@ -64,7 +75,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public List<ProductLog> GetByProductId(int productId)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entities = context.ProductLogs.Where(pl => pl.ProductId == productId).ToList();
                 return _mapper.Map<List<ProductLog>>(entities);
@@ -73,7 +84,7 @@ namespace TradingCompany.DAL.EF.Concrete
 
         public bool Update(ProductLog log)
         {
-            using (var context = new TradingCompanyContext())
+            using (var context = CreateContext())
             {
                 var entity = context.ProductLogs.Find(log.LogID);
                 if (entity == null)

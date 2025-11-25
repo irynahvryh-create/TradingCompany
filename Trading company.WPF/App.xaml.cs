@@ -19,6 +19,8 @@ using Microsoft.Extensions.Logging.Console;
 
 using TradingCompany.DAL.EF.MapperProfiles;
 using TradingCompany.WPF.Windows;
+using Trading_company.BL.Interfaces;
+using Trading_company.BL.Concrete;
 
 
 
@@ -69,9 +71,37 @@ namespace TradingCompany.WPF
 
             if (result)
             {
-                Current.MainWindow = Services.GetRequiredService<CategoryListMVVM>();
+
+
+
+                // Відкриваємо вікно вибору сутності
+                var selectionWindow = Services.GetRequiredService<EntitySelectionWindow>();
+                bool selectionResult = selectionWindow.ShowDialog() ?? false;
+
+                if (!selectionResult)
+                {
+                    Current.Shutdown();
+                    return;
+                }
+
+                // Відкриваємо головне вікно залежно від вибору
+                if (selectionWindow.SelectedEntity == "Category")
+                {
+                    Current.MainWindow = Services.GetRequiredService<CategoryListMVVM>();
+                }
+                else if (selectionWindow.SelectedEntity == "Manufacturer")
+                {
+                    Current.MainWindow = Services.GetRequiredService<ManufacturerListMVVM>();
+                }
+
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 Current.MainWindow.Show();
+
+
+
+                //Current.MainWindow = Services.GetRequiredService<CategoryListMVVM>();
+                //Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                //Current.MainWindow.Show();
             }
             else
             {
@@ -123,14 +153,14 @@ namespace TradingCompany.WPF
 
             services.AddTransient<ICategoryDal>(sp => new CategoryDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IProductDal>(sp => new ProductDalEF(connStr, sp.GetRequiredService<IMapper>()));
-            //services.AddTransient<IManufactureDal>(sp => new ManufactureDalEF(connStr, sp.GetRequiredService<IMapper>()));
+            services.AddTransient<IManufactureDal>(sp => new ManufactureDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IProductLogDal>(sp => new ProductLogDalEF(connStr, sp.GetRequiredService<IMapper>()));
 
             // BL реєстрації
             services.AddTransient<IAuthManager, AuthManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
             //services.AddTransient<IProductManager, ProductManager>();
-            //services.AddTransient<IManufactureManager, ManufactureManager>();
+            services.AddTransient<IManufactureManager, ManufactureManager>();
             //services.AddTransient<IProductLogManager, ProductLogManager>();
 
             // ViewModels
@@ -142,6 +172,9 @@ namespace TradingCompany.WPF
             //services.AddTransient<ProductListViewModel>();
             //services.AddTransient<ProductDetailsViewModel>();
 
+            services.AddTransient<ManufacturerListViewModel>();      // <-- Додати
+            services.AddTransient<ManufacturerDetailsViewModel>();
+
             // Windows
 
             services.AddTransient<Login>();
@@ -149,6 +182,10 @@ namespace TradingCompany.WPF
             services.AddTransient<CategoryDetails>();
             //services.AddTransient<ProductListMVVM>();
             //services.AddTransient<ProductDetails>();
+            services.AddTransient<EntitySelectionWindow>();
+            services.AddTransient<ManufacturerListMVVM>();
+            services.AddTransient<ManufacturerDetailsViewModel>();
+
 
             return services.BuildServiceProvider();
         }

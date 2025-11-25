@@ -21,6 +21,7 @@ namespace TradingCompany.BL.Concrete
 
         public Category CreateCategory(Category category)
         {
+
             return _categoryDal.Create(category);
         }
 

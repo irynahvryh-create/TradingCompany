@@ -88,5 +88,33 @@ namespace TradingCompany.WPF.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+
+
+
+        public bool DeleteSelectedCategory()
+        {
+            if (SelectedCategory == null) return false;
+
+            try
+            {
+                bool success = _categoryManager.DeleteCategory(SelectedCategory.CategoryID);
+                return success;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+       
+
+
+
+
+
+
+
+
     }
+
 }

@@ -15,6 +15,6 @@ namespace TradingCompany.BL.Interfaces
         User GetUserByLogin(string username);
         User GetUserById(int id);
         List<User> GetUsers();
-        string GetConnectionStatusTest();
+      //  string GetConnectionStatusTest();
     }
 }

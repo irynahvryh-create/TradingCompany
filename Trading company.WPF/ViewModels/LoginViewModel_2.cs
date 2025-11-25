@@ -1,5 +1,6 @@
 ﻿
-
+/*
+ * 
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,8 +13,8 @@ using TradingCompany.BL.Interfaces;
 using TradingCompany.WPF.Commands;
 using TradingCompany.WPF.Interfaces;
 using TradingCompany.DTO;
-/*
-namespace IMDB2025.WPF.ViewModels
+
+namespace TradingCompany.WPF.ViewModels
 {
     public class LoginViewModel_2 : INotifyPropertyChanged, ICloseable, IDataErrorInfo
     {
