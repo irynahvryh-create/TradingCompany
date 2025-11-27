@@ -22,9 +22,10 @@ namespace TradingCompany.WPF.Windows
     public partial class Login : Window
     {
         public Login(LoginViewModel vm)
-        {   InitializeComponent();
+        {
+            InitializeComponent();
             DataContext = vm;
-           
+
             Loaded += Login_Loaded;
         }
 

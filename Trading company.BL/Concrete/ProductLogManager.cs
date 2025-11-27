@@ -40,11 +40,9 @@ namespace Trading_company.BL.Concrete
 
         public ProductLog UpdateProductLog(ProductLog productlog)
         {
-           bool success = _prodactlogDal.Delete(productlog.LogID);
-            if (success)
-            {
-                return _prodactlogDal.Create(productlog);
-            }
+           bool success = _prodactlogDal.Update(productlog);
+            if (!success)
+                throw new Exception("Failed to update productlog");
             return productlog;
         }
     }

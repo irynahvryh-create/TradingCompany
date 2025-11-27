@@ -2,25 +2,24 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System.IO;
 using System.Windows;
+using Trading_company.BL.Concrete;
+using Trading_company.BL.Interfaces;
+using TradingCompany.BL.Concrete;
 using TradingCompany.BL.Concrete;
 using TradingCompany.BL.Interfaces;
-using TradingCompany.WPF;
-using TradingCompany.WPF.ViewModels;
-using TradingCompany.WPF.Windows;
-using TradingCompany.BL.Concrete;
 using TradingCompany.BL.Interfaces;
 using TradingCompany.DAL.Concrete;
 using TradingCompany.DAL.EF.Concrete;
-using TradingCompany.DAL.Interfaces;
-using TradingCompany.WPF.ViewModels;
-using Microsoft.Extensions.Logging.Console;
-
 using TradingCompany.DAL.EF.MapperProfiles;
+using TradingCompany.DAL.Interfaces;
+using TradingCompany.WPF;
+using TradingCompany.WPF.ViewModels;
+using TradingCompany.WPF.ViewModels;
 using TradingCompany.WPF.Windows;
-using Trading_company.BL.Interfaces;
-using Trading_company.BL.Concrete;
+using TradingCompany.WPF.Windows;
 
 
 
@@ -71,10 +70,6 @@ namespace TradingCompany.WPF
 
             if (result)
             {
-
-
-
-                // Відкриваємо вікно вибору сутності
                 var selectionWindow = Services.GetRequiredService<EntitySelectionWindow>();
                 bool selectionResult = selectionWindow.ShowDialog() ?? false;
 
@@ -84,7 +79,6 @@ namespace TradingCompany.WPF
                     return;
                 }
 
-                // Відкриваємо головне вікно залежно від вибору
                 if (selectionWindow.SelectedEntity == "Category")
                 {
                     Current.MainWindow = Services.GetRequiredService<CategoryListMVVM>();
@@ -96,19 +90,14 @@ namespace TradingCompany.WPF
 
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 Current.MainWindow.Show();
-
-
-
-                //Current.MainWindow = Services.GetRequiredService<CategoryListMVVM>();
-                //Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-                //Current.MainWindow.Show();
             }
             else
             {
                 Current.Shutdown();
             }
 
-           
+
+
         }
 
         private static IServiceProvider BuildServiceProvider()
@@ -153,15 +142,20 @@ namespace TradingCompany.WPF
 
             services.AddTransient<ICategoryDal>(sp => new CategoryDalEF(connStr, sp.GetRequiredService<IMapper>()));
             //services.AddTransient<IProductDal>(sp => new ProductDalEF(connStr, sp.GetRequiredService<IMapper>()));
+            // DAL для виробників
             services.AddTransient<IManufactureDal>(sp => new ManufactureDalEF(connStr, sp.GetRequiredService<IMapper>()));
+
+            
             //services.AddTransient<IProductLogDal>(sp => new ProductLogDalEF(connStr, sp.GetRequiredService<IMapper>()));
 
             // BL реєстрації
             services.AddTransient<IAuthManager, AuthManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
             //services.AddTransient<IProductManager, ProductManager>();
-            services.AddTransient<IManufactureManager, ManufactureManager>();
+            //services.AddTransient<IManufactureManager, ManufactureManager>();
             //services.AddTransient<IProductLogManager, ProductLogManager>();
+            services.AddTransient<IManufactureManager, ManufactureManager>();
+
 
             // ViewModels
 
@@ -171,9 +165,9 @@ namespace TradingCompany.WPF
             services.AddTransient<CategoryDetailsViewModel>();
             //services.AddTransient<ProductListViewModel>();
             //services.AddTransient<ProductDetailsViewModel>();
-
-            services.AddTransient<ManufacturerListViewModel>();      // <-- Додати
+            services.AddTransient<ManufacturerListViewModel>();
             services.AddTransient<ManufacturerDetailsViewModel>();
+
 
             // Windows
 
@@ -183,9 +177,8 @@ namespace TradingCompany.WPF
             //services.AddTransient<ProductListMVVM>();
             //services.AddTransient<ProductDetails>();
             services.AddTransient<EntitySelectionWindow>();
-            services.AddTransient<ManufacturerListMVVM>();
-            services.AddTransient<ManufacturerDetailsViewModel>();
-
+            services.AddTransient<ManufacturerListMVVM>();           // <-- Додати
+            services.AddTransient<ManufacturerDetails>();
 
             return services.BuildServiceProvider();
         }

@@ -53,7 +53,7 @@ namespace Trading_company.BL.Concrete
 
             bool success = _productDal.Update(product);
             if (!success)
-                throw new Exception("Failed to update category");
+                throw new Exception("Failed to update product");
 
             return product; // повертаємо оновлений об’єкт
         }
