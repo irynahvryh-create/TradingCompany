@@ -22,23 +22,32 @@ namespace TradingCompany.WPF
     {
         public static IServiceProvider? Services { get; private set; }
 
+
         protected override void OnStartup(StartupEventArgs e)
         {
             Services = BuildServiceProvider();
 
             var authManager = Services.GetRequiredService<IAuthManager>();
+            var privilegeDal = Services.GetRequiredService<IUserPrivilegeDal>();
 
             // Створюємо тестових користувачів, якщо їх немає
-            if (authManager.GetUserByLogin("admin") == null)
+            var admin = authManager.GetUserByLogin("admin");
+            if (admin == null)
             {
-                authManager.CreateUser(
+                admin = authManager.CreateUser(
                     email: "admin@trading.com",
                     username: "admin",
                     password: "123456",
                     privilegeType: PrivilegeType.Admin
                 );
             }
+            else if (admin.Privileges == null || !admin.Privileges.Any())
+            {
+                privilegeDal.AddPrivilegeToUser(admin.UserID, PrivilegeType.Admin);
+                admin = authManager.GetUserByLogin("admin");
+            }
 
+            // --- Перевірка та створення Kira ---
             var kira = authManager.GetUserByLogin("Kira");
             if (kira == null)
             {
@@ -49,18 +58,10 @@ namespace TradingCompany.WPF
                     privilegeType: PrivilegeType.User
                 );
             }
-            else
+            else if (kira.Privileges == null || !kira.Privileges.Any())
             {
-                // Якщо користувач існує, але немає привілеї, додаємо
-                if (kira.Privileges == null || !kira.Privileges.Any())
-                {
-                    // Використовуємо IUserPrivilegeDal для додавання привілеї
-                    var privilegeDal = App.Services.GetRequiredService<IUserPrivilegeDal>();
-                    privilegeDal.AddPrivilegeToUser(kira.UserID, PrivilegeType.User);
-
-                    // Підтягнемо оновленого користувача
-                    kira = authManager.GetUserByLogin("Kira");
-                }
+                privilegeDal.AddPrivilegeToUser(kira.UserID, PrivilegeType.User);
+                kira = authManager.GetUserByLogin("Kira");
             }
 
 
