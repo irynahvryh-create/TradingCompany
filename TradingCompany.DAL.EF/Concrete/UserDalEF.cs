@@ -30,30 +30,27 @@ namespace TradingCompany.DAL.EF.Concrete
             return new TradingCompanyContext(options);
         }
 
-        // --- Метод створення користувача з привілеєю ---
         public User CreateUser(string email, string username, string password, PrivilegeType privilegeType)
         {
             using var context = CreateContext();
 
-            // Перевіряємо, чи користувач вже існує
             if (context.Users.Any(u => u.Login == username))
                 throw new Exception("User already exists!");
 
-            // Створюємо соль та хеш пароля
-            Guid salt = Guid.NewGuid();
+            var salt = Guid.NewGuid();
             var user = new Models.User
             {
                 Login = username,
                 Email = email,
-                Password = Hash(password, salt.ToString()),
+                Password = HashPassword(password, salt.ToString()),
                 Salt = salt,
                 RowInsertTime = DateTime.UtcNow,
                 RowUpdateTime = DateTime.UtcNow
             };
             context.Users.Add(user);
-            context.SaveChanges(); // Зберігаємо, щоб згенерувався UserId
+            context.SaveChanges(); // щоб згенерувався UserId
 
-            // Отримуємо або створюємо привілею
+            // Створюємо або отримуємо привілею
             var privilegeName = privilegeType.ToString();
             var privilege = context.Privileges.SingleOrDefault(p => p.Name == privilegeName);
             if (privilege == null)
@@ -64,10 +61,10 @@ namespace TradingCompany.DAL.EF.Concrete
                     RowInsertTime = DateTime.UtcNow
                 };
                 context.Privileges.Add(privilege);
-                context.SaveChanges(); // Зберігаємо, щоб згенерувався PrivilegeId
+                context.SaveChanges();
             }
 
-            // Додаємо зв'язок користувач-привілея
+            // Прив'язуємо користувача до привілеї
             context.UserPrivileges.Add(new UserPrivilege
             {
                 UserId = user.UserId,
@@ -76,8 +73,8 @@ namespace TradingCompany.DAL.EF.Concrete
             });
             context.SaveChanges();
 
-            // Повертаємо DTO
-            return _mapper.Map<User>(user);
+            // Повертаємо DTO з усіма привілеями
+            return GetUserById(user.UserId);
         }
 
         public User GetUserById(int id)
@@ -116,11 +113,16 @@ namespace TradingCompany.DAL.EF.Concrete
         public bool Login(string username, string password)
         {
             using var context = CreateContext();
-            var user = context.Users.SingleOrDefault(u => u.Login == username);
-            return user != null && user.Password.SequenceEqual(Hash(password, user.Salt.ToString()));
+            var user = context.Users
+                .Include(u => u.UserPrivileges)
+                .ThenInclude(up => up.Privilege)
+                .SingleOrDefault(u => u.Login == username);
+
+            if (user == null) return false;
+            return user.Password.SequenceEqual(HashPassword(password, user.Salt.ToString()));
         }
 
-        private byte[] Hash(string password, string salt)
+        private byte[] HashPassword(string password, string salt)
         {
             using var alg = SHA512.Create();
             return alg.ComputeHash(Encoding.UTF8.GetBytes(password + salt));

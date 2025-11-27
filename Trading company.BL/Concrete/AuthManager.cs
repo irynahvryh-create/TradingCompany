@@ -21,7 +21,6 @@ namespace TradingCompany.BL.Concrete
             _userPrivilegeDal = userPrivilegeDal;
         }
 
-        // Логін користувача
         public bool Login(string username, string password)
         {
             bool ok = _userDal.Login(username, password);
@@ -32,25 +31,17 @@ namespace TradingCompany.BL.Concrete
                 return false;
             }
 
+            // Отримуємо користувача з усіма привілеями
             var user = _userDal.GetUserByLogin(username);
-
-            if (user == null)
-            {
-                CurrentUser = null;
-                CurrentUserChanged?.Invoke();
-                return false;
-            }
-
             CurrentUser = user;
             CurrentUserChanged?.Invoke();
             return true;
         }
 
-        // Перевірка чи користувач є адміном
         public bool IsAdmin(User user)
         {
             return user.Privileges != null &&
-                   user.Privileges.Any(p => string.Equals(p.Name, "Admin", StringComparison.OrdinalIgnoreCase));
+                   user.Privileges.Any(p => p.Name.Equals("Admin", StringComparison.OrdinalIgnoreCase));
         }
 
         public void SetCurrentUser(User user)
@@ -59,16 +50,9 @@ namespace TradingCompany.BL.Concrete
             CurrentUserChanged?.Invoke();
         }
 
-        // Створення користувача з привілеєю
         public User CreateUser(string email, string username, string password, PrivilegeType type)
         {
-            // Використовуємо DAL, який одразу додає привілею
-            var user = _userDal.CreateUser(email, username, password, type);
-
-            // Додатково можна перевірити, що привілея точно додалась
-            var fullUser = _userDal.GetUserById(user.UserID);
-
-            return fullUser ?? user;
+            return _userDal.CreateUser(email, username, password, type);
         }
 
         public User GetUserById(int id) => _userDal.GetUserById(id);
