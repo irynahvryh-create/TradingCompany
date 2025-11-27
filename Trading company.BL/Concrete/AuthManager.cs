@@ -21,19 +21,40 @@ namespace TradingCompany.BL.Concrete
             _userPrivilegeDal = userPrivilegeDal;
         }
 
+        // У TradingCompany.BL.Concrete/AuthManager.cs
+
         public bool Login(string username, string password)
         {
+            // 1. ПЕРЕВІРКА ПАРОЛЯ
             bool ok = _userDal.Login(username, password);
-            if (!ok) return false;
+            if (!ok)
+            {
+                CurrentUser = null;
+                CurrentUserChanged?.Invoke();
+                return false;
+            }
 
-            CurrentUser = _userDal.GetUserByLogin(username);
+            // 2. ОТРИМУЄМО ПОВНИЙ ОБ'ЄКТ (якщо автентифікація успішна)
+            var user = _userDal.GetUserByLogin(username);
+
+            // 🛑 КРИТИЧНА ПЕРЕВІРКА: Якщо DAL не повернув об'єкт User DTO (може бути помилка мапінгу або БД)
+            if (user == null)
+            {
+                // Це означає, що DAL не зміг знайти або створити DTO
+                CurrentUser = null;
+                CurrentUserChanged?.Invoke();
+                return false;
+            }
+
+            // 3. ЗБЕРІГАННЯ СЕСІЇ У BL (АВТОРИЗАЦІЯ)
+            CurrentUser = user; // ✅ Успішно встановлюємо об'єкт User DTO
             CurrentUserChanged?.Invoke();
             return true;
         }
 
         public bool IsAdmin(User user)
         {
-            return user.Privileges.Any(p => p.Name == "Admin");
+            return user.Privileges.Any(p => string.Equals(p.Name, "Admin", StringComparison.OrdinalIgnoreCase));
         }
 
         public void SetCurrentUser(User user)

@@ -20,7 +20,7 @@ namespace Trading_company.BL.Concrete
         }
         public ProductLog CreateProductLog(ProductLog productlog)
         {
-           return productlog;
+            return _prodactlogDal.Create(productlog); ;
         }
 
         public bool DeleteProductLog(int productlogId)

@@ -6,31 +6,21 @@ namespace Trading_company.WPF.Commands
     public class RelayCommand : ICommand
     {
         private readonly Action<object?> _execute;
-        private readonly Func<object?, bool>? _canExecute;
+        private readonly Predicate<object?>? _canExecute;
 
-        public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
+        public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter)
+        public bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter) ?? true;
+        public void Execute(object? parameter) => _execute(parameter);
+        public event EventHandler? CanExecuteChanged
         {
-            return _canExecute?.Invoke(parameter) ?? true;
-        }
-
-        public void Execute(object? parameter)
-        {
-            _execute(parameter);
-        }
-
-        // Подія CanExecuteChanged
-        public event EventHandler? CanExecuteChanged;
-
-        // Метод для оновлення CanExecute вручну
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
     }
+
 }

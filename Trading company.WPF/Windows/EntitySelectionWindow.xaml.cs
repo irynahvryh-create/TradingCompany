@@ -24,5 +24,17 @@ namespace TradingCompany.WPF.Windows
             DialogResult = true;
             Close();
         }
+        private void ProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedEntity = "Product";
+            DialogResult = true;
+            Close();
+        }
+        private void ProductLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedEntity = "ProductLog";
+            DialogResult = true;
+            Close();
+        }
     }
 }

@@ -10,7 +10,9 @@
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
             <TextBlock Text="Виберіть сутність для роботи:" FontSize="16" Margin="0,0,0,20" HorizontalAlignment="Center"/>
             <Button Content="Категорії" Width="150" Margin="0,0,0,10" Click="CategoryButton_Click"/>
-            <Button Content="Виробники" Width="150" Click="ManufacturerButton_Click"/>
+            <Button Content="Виробники" Width="150" Margin="0,0,0,10" Click="ManufacturerButton_Click"/>
+            <Button Content="Продукти" Width="150" Margin="0,0,0,10" Click="ProductButton_Click"/>
+            <Button Content="Історія продуктів" Width="150" Click="ProductLogButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

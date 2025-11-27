@@ -87,6 +87,15 @@ namespace TradingCompany.WPF
                 {
                     Current.MainWindow = Services.GetRequiredService<ManufacturerListMVVM>();
                 }
+                else if (selectionWindow.SelectedEntity == "Product")
+                {
+                    Current.MainWindow = Services.GetRequiredService<ProductListMVVM>();
+                }
+                else if (selectionWindow.SelectedEntity == "ProductLog")
+                {
+                    Current.MainWindow = Services.GetRequiredService<ProductLogListMVVM>();
+                }
+
 
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 Current.MainWindow.Show();
@@ -135,25 +144,24 @@ namespace TradingCompany.WPF
                 throw new InvalidOperationException("Connection string 'TradingCompanyDB' not found in config.json.");
 
             // DAL реєстрації
-            services.AddTransient<IUserDal>(sp =>
-     new UserDalEF(connStr, sp.GetRequiredService<IMapper>()));
-            // <-- ДОДАТИ
+            services.AddTransient<IUserDal>(sp =>new UserDalEF(connStr, sp.GetRequiredService<IMapper>()));
+           
             services.AddTransient<IUserPrivilegeDal>(sp => new UserPrivilegeDalEF(connStr, sp.GetRequiredService<IMapper>())); // <-- ДОДАТИ
 
             services.AddTransient<ICategoryDal>(sp => new CategoryDalEF(connStr, sp.GetRequiredService<IMapper>()));
-            //services.AddTransient<IProductDal>(sp => new ProductDalEF(connStr, sp.GetRequiredService<IMapper>()));
-            // DAL для виробників
+            services.AddTransient<IProductDal>(sp => new ProductDalEF(connStr, sp.GetRequiredService<IMapper>()));
+            
             services.AddTransient<IManufactureDal>(sp => new ManufactureDalEF(connStr, sp.GetRequiredService<IMapper>()));
 
-            
-            //services.AddTransient<IProductLogDal>(sp => new ProductLogDalEF(connStr, sp.GetRequiredService<IMapper>()));
+
+            services.AddTransient<IProductLogDal>(sp => new ProductLogDalEF(connStr, sp.GetRequiredService<IMapper>()));
 
             // BL реєстрації
             services.AddTransient<IAuthManager, AuthManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
-            //services.AddTransient<IProductManager, ProductManager>();
-            //services.AddTransient<IManufactureManager, ManufactureManager>();
-            //services.AddTransient<IProductLogManager, ProductLogManager>();
+            services.AddTransient<IProductManager, ProductManager>();
+            
+           services.AddTransient<IProductLogManager, ProductLogManager>();
             services.AddTransient<IManufactureManager, ManufactureManager>();
 
 
@@ -163,8 +171,13 @@ namespace TradingCompany.WPF
 
             services.AddTransient<CategoryListViewModel>();
             services.AddTransient<CategoryDetailsViewModel>();
-            //services.AddTransient<ProductListViewModel>();
-            //services.AddTransient<ProductDetailsViewModel>();
+
+            services.AddTransient<ProductListViewModel>();
+            services.AddTransient<ProductDetailsViewModel>();
+            
+            services.AddTransient<ProductLogListViewModel>();
+            services.AddTransient<ProductLogDetailsViewModel>();
+            
             services.AddTransient<ManufacturerListViewModel>();
             services.AddTransient<ManufacturerDetailsViewModel>();
 
@@ -174,11 +187,17 @@ namespace TradingCompany.WPF
             services.AddTransient<Login>();
             services.AddTransient<CategoryListMVVM>();
             services.AddTransient<CategoryDetails>();
-            //services.AddTransient<ProductListMVVM>();
-            //services.AddTransient<ProductDetails>();
+
+            services.AddTransient<ProductListMVVM>();
+            services.AddTransient<ProductDetails>();
+
             services.AddTransient<EntitySelectionWindow>();
+
             services.AddTransient<ManufacturerListMVVM>();           // <-- Додати
             services.AddTransient<ManufacturerDetails>();
+
+            services.AddTransient<ProductLogListMVVM>();
+            services.AddTransient<ProductLogDetails>();
 
             return services.BuildServiceProvider();
         }
