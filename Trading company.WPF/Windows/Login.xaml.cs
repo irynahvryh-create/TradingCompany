@@ -51,6 +51,7 @@ namespace TradingCompany.WPF.Windows
             {
                 lvm.LoginSuccessful += () =>
                 {
+                    new UserDebugWindow().Show();
                     DialogResult = true;
                     Close();
                 };

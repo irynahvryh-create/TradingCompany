@@ -5,25 +5,51 @@ using System.Windows.Data;
 using System.Windows.Input;
 using TradingCompany.BL.Interfaces;
 using TradingCompany.DTO;
+using TradingCompany.WPF.Commands;
 
 namespace TradingCompany.WPF.ViewModels
 {
     public class CategoryListViewModel : INotifyPropertyChanged
     {
         private readonly ICategoryManager _categoryManager;
+        private readonly IAuthManager _authManager;
 
-        private ObservableCollection<Category> _categoryList;
-        public ObservableCollection<Category> Categories
+        public ObservableCollection<Category> Categories { get; private set; }
+        public ICollectionView CategoriesView { get; private set; }
+        public Category? SelectedCategory { get; set; }
+
+        // Команда для прив'язки до IsEnabled кнопок
+        public ICommand CanUseByAdminCommand { get; }
+
+        public CategoryListViewModel(ICategoryManager categoryManager, IAuthManager authManager)
         {
-            get { return _categoryList; }
-            set
-            {
-                _categoryList = value;
-                OnPropertyChanged(nameof(Categories));
-            }
+            _categoryManager = categoryManager ?? throw new ArgumentNullException(nameof(categoryManager));
+            _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
+
+            // Команда без виконання, тільки перевірка доступу
+            CanUseByAdminCommand = new RelayCommand(
+                _ => { },
+                _ => _authManager.CurrentUser != null && _authManager.IsAdmin(_authManager.CurrentUser)
+            );
+
+            // Оновлюємо кнопки при зміні користувача
+            _authManager.CurrentUserChanged += () => OnPropertyChanged(nameof(CanUseByAdminCommand));
+
+            Refresh();
         }
 
-        public ICollectionView CategoriesView { get; private set; }
+        // Фільтр для DataGrid
+        private bool FilterPredicate(object? obj)
+        {
+            if (string.IsNullOrWhiteSpace(FilterText)) return true;
+
+            if (obj is Category c)
+            {
+                return c.Name?.IndexOf(FilterText.Trim(), StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+
+            return false;
+        }
 
         private string _filterText = string.Empty;
         public string FilterText
@@ -38,61 +64,24 @@ namespace TradingCompany.WPF.ViewModels
             }
         }
 
-        private Category? _selectedCategory;
-        public Category? SelectedCategory
-        {
-            get => _selectedCategory;
-            set
-            {
-                if (_selectedCategory == value) return;
-                _selectedCategory = value;
-                OnPropertyChanged(nameof(SelectedCategory));
-            }
-        }
-
-
-        //
-
-        public ICommand DeleteCommand { get; }
-
-        //
-
-
-        public CategoryListViewModel(ICategoryManager categoryManager)
-        {
-            _categoryManager = categoryManager ?? throw new ArgumentNullException(nameof(categoryManager));
-
-            Refresh();
-        }
-
-        private bool FilterPredicate(object? obj)
-        {
-            if (string.IsNullOrWhiteSpace(FilterText))
-                return true;
-
-            if (obj is Category c)
-            {
-                var q = FilterText.Trim();
-                return (c.Name?.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0);
-            }
-
-            return false;
-        }
-
+        // Оновлення колекції
         public void Refresh()
         {
             Categories = new ObservableCollection<Category>(_categoryManager.GetAllCategories());
             CategoriesView = CollectionViewSource.GetDefaultView(Categories);
             CategoriesView.Filter = FilterPredicate;
+            OnPropertyChanged(nameof(Categories));
         }
 
-
+        // Видалення категорії
         public bool DeleteSelectedCategory()
         {
             if (SelectedCategory == null) return false;
             try
             {
-                return _categoryManager.DeleteCategory(SelectedCategory.CategoryID);
+                _categoryManager.DeleteCategory(SelectedCategory.CategoryID);
+                Refresh();
+                return true;
             }
             catch
             {
@@ -100,8 +89,8 @@ namespace TradingCompany.WPF.ViewModels
             }
         }
 
-
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        protected void OnPropertyChanged(string propName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
     }
 }

@@ -19,5 +19,6 @@ namespace TradingCompany.BL.Interfaces
         List<User> GetUsers();
 
         void SetCurrentUser(User user);
+
     }
 }

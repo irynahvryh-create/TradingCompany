@@ -21,11 +21,9 @@ namespace TradingCompany.BL.Concrete
             _userPrivilegeDal = userPrivilegeDal;
         }
 
-        // У TradingCompany.BL.Concrete/AuthManager.cs
-
+        // Логін користувача
         public bool Login(string username, string password)
         {
-            // 1. ПЕРЕВІРКА ПАРОЛЯ
             bool ok = _userDal.Login(username, password);
             if (!ok)
             {
@@ -34,27 +32,25 @@ namespace TradingCompany.BL.Concrete
                 return false;
             }
 
-            // 2. ОТРИМУЄМО ПОВНИЙ ОБ'ЄКТ (якщо автентифікація успішна)
             var user = _userDal.GetUserByLogin(username);
 
-            // 🛑 КРИТИЧНА ПЕРЕВІРКА: Якщо DAL не повернув об'єкт User DTO (може бути помилка мапінгу або БД)
             if (user == null)
             {
-                // Це означає, що DAL не зміг знайти або створити DTO
                 CurrentUser = null;
                 CurrentUserChanged?.Invoke();
                 return false;
             }
 
-            // 3. ЗБЕРІГАННЯ СЕСІЇ У BL (АВТОРИЗАЦІЯ)
-            CurrentUser = user; // ✅ Успішно встановлюємо об'єкт User DTO
+            CurrentUser = user;
             CurrentUserChanged?.Invoke();
             return true;
         }
 
+        // Перевірка чи користувач є адміном
         public bool IsAdmin(User user)
         {
-            return user.Privileges.Any(p => string.Equals(p.Name, "Admin", StringComparison.OrdinalIgnoreCase));
+            return user.Privileges != null &&
+                   user.Privileges.Any(p => string.Equals(p.Name, "Admin", StringComparison.OrdinalIgnoreCase));
         }
 
         public void SetCurrentUser(User user)
@@ -63,15 +59,22 @@ namespace TradingCompany.BL.Concrete
             CurrentUserChanged?.Invoke();
         }
 
+        // Створення користувача з привілеєю
         public User CreateUser(string email, string username, string password, PrivilegeType type)
         {
-            var user = _userDal.CreateUser(email, username, password);
-            _userPrivilegeDal.AddPrivilegeToUser(user.UserID, type);
-            return _userDal.GetUserById(user.UserID);
+            // Використовуємо DAL, який одразу додає привілею
+            var user = _userDal.CreateUser(email, username, password, type);
+
+            // Додатково можна перевірити, що привілея точно додалась
+            var fullUser = _userDal.GetUserById(user.UserID);
+
+            return fullUser ?? user;
         }
 
         public User GetUserById(int id) => _userDal.GetUserById(id);
+
         public User GetUserByLogin(string username) => _userDal.GetUserByLogin(username);
+
         public List<User> GetUsers() => _userDal.GetUsers();
     }
 }

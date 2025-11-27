@@ -24,7 +24,7 @@ public class AuthManagerTests
     public void CreateUser_AddsUserAndPrivilege()
     {
         var user = new User { UserID = 1, Login = "test" };
-        _mockUserDal.Setup(d => d.CreateUser("a@b.com", "test", "pass")).Returns(user);
+        _mockUserDal.Setup(d => d.CreateUser("a@b.com", "test", "pass", PrivilegeType.Admin)).Returns(user);
         _mockUserDal.Setup(d => d.GetUserById(1)).Returns(user);
 
         var result = _manager.CreateUser("a@b.com", "test", "pass", PrivilegeType.Admin);

@@ -9,10 +9,11 @@ namespace TradingCompany.DAL.Interfaces
 {
     public interface IUserDal
     {
-        User CreateUser(string email, string username, string password);
-        bool Login(string username, string password);
+        User CreateUser(string email, string username, string password, PrivilegeType privilegeType);
+
+        User GetUserById(int id);
         User GetUserByLogin(string username);
         List<User> GetUsers();
-        User GetUserById(int id);
+        bool Login(string username, string password);
     }
 }

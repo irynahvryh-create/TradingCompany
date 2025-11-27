@@ -1,0 +1,23 @@
+﻿<Window x:Class="TradingCompany.WPF.Windows.UserDebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="User Debug" Height="300" Width="400">
+    <StackPanel Margin="20">
+        <TextBlock Text="Current User Debug Info" FontSize="18" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Login:"/>
+        <TextBlock Text="{Binding CurrentUser.Login}" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Privileges:"/>
+        <ItemsControl ItemsSource="{Binding CurrentUser.Privileges}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <TextBlock Text="Is Admin:" Margin="0,10,0,0"/>
+        <TextBlock Text="{Binding IsAdminText}" FontWeight="Bold"/>
+    </StackPanel>
+</Window>
