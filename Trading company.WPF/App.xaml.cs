@@ -39,15 +39,30 @@ namespace TradingCompany.WPF
                 );
             }
 
-            if (authManager.GetUserByLogin("Kira") == null)
+            var kira = authManager.GetUserByLogin("Kira");
+            if (kira == null)
             {
-                authManager.CreateUser(
+                kira = authManager.CreateUser(
                     email: "kira@example.com",
                     username: "Kira",
                     password: "654321",
                     privilegeType: PrivilegeType.User
                 );
             }
+            else
+            {
+                // Якщо користувач існує, але немає привілеї, додаємо
+                if (kira.Privileges == null || !kira.Privileges.Any())
+                {
+                    // Використовуємо IUserPrivilegeDal для додавання привілеї
+                    var privilegeDal = App.Services.GetRequiredService<IUserPrivilegeDal>();
+                    privilegeDal.AddPrivilegeToUser(kira.UserID, PrivilegeType.User);
+
+                    // Підтягнемо оновленого користувача
+                    kira = authManager.GetUserByLogin("Kira");
+                }
+            }
+
 
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
