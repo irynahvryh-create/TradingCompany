@@ -32,11 +32,4 @@
     <ProjectReference Include="..\TradingCompany.DTO\TradingCompany.DTO.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Windows\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>

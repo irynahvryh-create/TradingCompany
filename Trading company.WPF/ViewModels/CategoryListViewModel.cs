@@ -18,25 +18,32 @@ namespace TradingCompany.WPF.ViewModels
         public ICollectionView CategoriesView { get; private set; }
         public Category? SelectedCategory { get; set; }
 
-        // Команда для прив'язки до IsEnabled кнопок
-        public ICommand CanUseByAdminCommand { get; }
+        // Команди для кнопок
+        public ICommand DeleteCategoryCommand { get; }
 
         public CategoryListViewModel(ICategoryManager categoryManager, IAuthManager authManager)
         {
             _categoryManager = categoryManager ?? throw new ArgumentNullException(nameof(categoryManager));
             _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
 
-            // Команда без виконання, тільки перевірка доступу
-            CanUseByAdminCommand = new RelayCommand(
-                _ => { },
+            // Команда видалення з перевіркою прав
+            DeleteCategoryCommand = new RelayCommand(
+                _ => DeleteSelectedCategory(),
                 _ => _authManager.CurrentUser != null && _authManager.IsAdmin(_authManager.CurrentUser)
             );
 
-            // Оновлюємо кнопки при зміні користувача
-            _authManager.CurrentUserChanged += () => OnPropertyChanged(nameof(CanUseByAdminCommand));
+            // Слідкуємо за зміною CurrentUser для оновлення стану команд
+            _authManager.CurrentUserChanged += () =>
+            {
+                OnPropertyChanged(nameof(CanDelete));
+                CommandManager.InvalidateRequerySuggested(); // оновлює CanExecute
+            };
 
             Refresh();
         }
+
+        // Властивість для прив'язки IsEnabled у UI (альтернатива команді)
+        public bool CanDelete => _authManager.CurrentUser != null && _authManager.IsAdmin(_authManager.CurrentUser);
 
         // Фільтр для DataGrid
         private bool FilterPredicate(object? obj)
@@ -44,9 +51,7 @@ namespace TradingCompany.WPF.ViewModels
             if (string.IsNullOrWhiteSpace(FilterText)) return true;
 
             if (obj is Category c)
-            {
                 return c.Name?.IndexOf(FilterText.Trim(), StringComparison.OrdinalIgnoreCase) >= 0;
-            }
 
             return false;
         }
@@ -73,10 +78,17 @@ namespace TradingCompany.WPF.ViewModels
             OnPropertyChanged(nameof(Categories));
         }
 
-        // Видалення категорії
+        // Видалення категорії з перевіркою прав
         public bool DeleteSelectedCategory()
         {
             if (SelectedCategory == null) return false;
+
+            if (_authManager.CurrentUser == null || !_authManager.IsAdmin(_authManager.CurrentUser))
+            {
+                // Користувач не має прав → нічого не робимо
+                return false;
+            }
+
             try
             {
                 _categoryManager.DeleteCategory(SelectedCategory.CategoryID);

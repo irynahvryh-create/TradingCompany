@@ -28,11 +28,11 @@ namespace TradingCompany.WPF.Windows
             var auth = App.Services.GetRequiredService<IAuthManager>();
 
             // ⚠️ TEST ONLY – встановлюємо адміністратора вручну
-            var adminUser = auth.GetUsers().FirstOrDefault(u => u.Login == "admin");
-            if (adminUser != null)
-            {
-                auth.SetCurrentUser(adminUser);
-            }
+            //var adminUser = auth.GetUsers().FirstOrDefault(u => u.Login == "admin");
+            //if (adminUser != null)
+            //{
+            //    auth.SetCurrentUser(adminUser);
+            //}
 
             DataContext = new UserDebugViewModel(auth);
         }

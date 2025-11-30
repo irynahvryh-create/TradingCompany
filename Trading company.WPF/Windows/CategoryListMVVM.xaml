@@ -11,11 +11,12 @@
 
             <!-- Кнопки доступні лише адміну -->
             <Button Content="Add Category" Click="AddButton_Click"
-                    IsEnabled="{Binding CanUseByAdminCommand.CanExecute, Mode=OneWay}" Margin="5"/>
+        IsEnabled="{Binding CanDelete}" Margin="5"/>
             <Button Content="Edit Category" Click="EditButton_Click"
-                    IsEnabled="{Binding CanUseByAdminCommand.CanExecute, Mode=OneWay}" Margin="5"/>
+        IsEnabled="{Binding CanDelete}" Margin="5"/>
             <Button Content="Delete Category" Click="DeleteButton_Click"
-                    IsEnabled="{Binding CanUseByAdminCommand.CanExecute, Mode=OneWay}" Margin="5"/>
+        IsEnabled="{Binding CanDelete}" Margin="5"/>
+
 
             <!-- DataGrid для категорій -->
             <DataGrid ItemsSource="{Binding Categories}"
