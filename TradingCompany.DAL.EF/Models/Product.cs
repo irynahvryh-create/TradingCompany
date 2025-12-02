@@ -17,7 +17,7 @@ public partial class Product
     public string Name { get; set; } = null!;
 
     [Column("CategoryID")]
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
     [Column(TypeName = "decimal(10, 2)")]
     public decimal PriceIn { get; set; }
@@ -32,7 +32,7 @@ public partial class Product
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
-    public virtual Category Category { get; set; } = null!;
+    public virtual Category ? Category { get; set; } = null!;
 
     [ForeignKey("ManufacturerId")]
     [InverseProperty("Products")]

@@ -9,8 +9,10 @@
     
         <Grid Margin="10">
             <StackPanel>
+            <Button Content="Назад" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+Click="BackButton_Click"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <Button x:Name="AddButton" Content="Add Manufacturer" Width="120" Margin="0,0,10,0" Click="AddButton_Click"/>
                     <Button x:Name="EditButton" Content="Edit Manufacturer" Width="120" Click="EditButton_Click"/>
                 <Button x:Name="DeleteButton" Content="Delete Manufacturer" Click="DeleteButton_Click" Margin="5"/>

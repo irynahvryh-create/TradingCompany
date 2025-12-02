@@ -85,7 +85,7 @@ namespace TradingCompany.DAL.EF.Concrete
                     return false;
                 // Оновлюємо поля
                 entity.Name = product.Name;
-                entity.CategoryId = product.CategoryID;
+                entity.CategoryId = product.CategoryID != 0 ? product.CategoryID : null;
                 entity.PriceIn = product.PriceIn;
                 entity.PriceOut = product.PriceOut;
                 entity.ManufacturerId = product.ManufacturerID;

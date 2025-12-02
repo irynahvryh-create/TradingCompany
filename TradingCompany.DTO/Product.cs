@@ -10,7 +10,7 @@ namespace TradingCompany.DTO
     {
         public int ProductID { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int CategoryID { get; set; }
+        public int ? CategoryID { get; set; }
         public decimal PriceIn { get; set; }
         public decimal PriceOut { get; set; }
         public int ManufacturerID { get; set; }

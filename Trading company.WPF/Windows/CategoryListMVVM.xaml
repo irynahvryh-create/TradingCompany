@@ -6,34 +6,34 @@
         xmlns:local="clr-namespace:TradingCompany.WPF.Windows"
         mc:Ignorable="d"
         Title="CategoryListMVVM" Height="450" Width="800">
-    <Grid>
-        <StackPanel>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Кнопки -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+        </Grid.RowDefinitions>
 
-            <!-- Кнопки доступні лише адміну -->
-            <Button Content="Add Category" Click="AddButton_Click"
-        IsEnabled="{Binding CanDelete}" Margin="5"/>
-            <Button Content="Edit Category" Click="EditButton_Click"
-        IsEnabled="{Binding CanDelete}" Margin="5"/>
-            <Button Content="Delete Category" Click="DeleteButton_Click"
-        IsEnabled="{Binding CanDelete}" Margin="5"/>
-
-
-            <!-- DataGrid для категорій -->
-            <DataGrid ItemsSource="{Binding Categories}"
-                      SelectedItem="{Binding SelectedCategory}"
-                      AutoGenerateColumns="False" 
-                      IsReadOnly="True" 
-                      HeadersVisibility="Column"
-                      Margin="0,10,0,0">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Назва Категорії" 
-                                        Binding="{Binding Name}" Width="200" />
-                    <DataGridCheckBoxColumn Header="Активний" 
-                                            Binding="{Binding Status}" Width="Auto" />
-                </DataGrid.Columns>
-            </DataGrid>
-
+        <!-- Горизонтальний рядок кнопок -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Margin="0,0,0,10">
+            <Button Content="Add Category" Click="AddButton_Click" IsEnabled="{Binding CanDelete}" Margin="5"/>
+            <Button Content="Edit Category" Click="EditButton_Click" IsEnabled="{Binding CanDelete}" Margin="5"/>
+            <Button Content="Delete Category" Click="DeleteButton_Click" IsEnabled="{Binding CanDelete}" Margin="5"/>
+            <Button Content="Назад" Click="BackButton_Click" Margin="5"/>
         </StackPanel>
+
+        <!-- DataGrid для категорій -->
+        <DataGrid ItemsSource="{Binding Categories}"
+              SelectedItem="{Binding SelectedCategory}"
+              AutoGenerateColumns="False" 
+              IsReadOnly="True" 
+              HeadersVisibility="Column"
+              Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Назва Категорії" Binding="{Binding Name}" Width="200" />
+                <DataGridCheckBoxColumn Header="Активний" Binding="{Binding Status}" Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
+
 </Window>

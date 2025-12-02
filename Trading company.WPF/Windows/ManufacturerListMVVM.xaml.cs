@@ -74,5 +74,44 @@ namespace TradingCompany.WPF.Windows
         }
 
 
+
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Приховуємо поточне вікно, щоб MainWindow не закрив додаток
+            this.Hide();
+
+            // Відкриваємо вікно вибору сутності
+            var selectionWindow = App.Services.GetRequiredService<EntitySelectionWindow>();
+            bool? result = selectionWindow.ShowDialog();
+
+            if (result == true)
+            {
+                switch (selectionWindow.SelectedEntity)
+                {
+                    case "Category":
+                        var catWindow = App.Services.GetRequiredService<CategoryListMVVM>();
+                        catWindow.ShowDialog();
+                        break;
+                    case "Manufacturer":
+                        var manWindow = App.Services.GetRequiredService<ManufacturerListMVVM>();
+                        manWindow.ShowDialog();
+                        break;
+                    case "Product":
+                        var prodWindow = App.Services.GetRequiredService<ProductListMVVM>();
+                        prodWindow.ShowDialog();
+                        break;
+                    case "ProductLog":
+                        var logWindow = App.Services.GetRequiredService<ProductLogListMVVM>();
+                        logWindow.ShowDialog();
+                        break;
+                }
+            }
+
+            // Після повернення з вибору сутності показуємо поточне вікно назад
+            this.Show();
+        }
+
+
     }
 }

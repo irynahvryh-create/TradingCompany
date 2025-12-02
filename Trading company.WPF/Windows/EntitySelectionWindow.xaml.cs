@@ -11,6 +11,8 @@ namespace TradingCompany.WPF.Windows
             InitializeComponent();
         }
 
+
+
         private void CategoryButton_Click(object sender, RoutedEventArgs e)
         {
             SelectedEntity = "Category";

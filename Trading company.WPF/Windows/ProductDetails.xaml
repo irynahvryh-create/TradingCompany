@@ -23,7 +23,10 @@
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Content="Категорія ID:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CategoryID, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Row="1" Grid.Column="1"
+          ItemsSource="{Binding Categories}"
+          SelectedItem="{Binding SelectedCategory}"
+          DisplayMemberPath="Name"/>
 
         <Label Content="Виробник ID:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ManufacturerID, UpdateSourceTrigger=PropertyChanged}"/>
