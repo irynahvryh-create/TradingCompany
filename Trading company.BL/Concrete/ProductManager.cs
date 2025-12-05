@@ -55,7 +55,7 @@ namespace Trading_company.BL.Concrete
             if (!success)
                 throw new Exception("Failed to update product");
 
-            return product; // повертаємо оновлений об’єкт
+            return product; 
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Trading_company.BL.Concrete
             bool success = _manufactureDal.Update(manufacture);
             if (!success)
                 throw new Exception("Failed to update manufacture");
-            return manufacture; // повертаємо оновлений об’єкт
+            return manufacture; 
         }
     }
 }

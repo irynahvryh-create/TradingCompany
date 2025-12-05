@@ -36,7 +36,7 @@ namespace TradingCompany.BL.Concrete
             if (!success)
                 throw new Exception("Failed to update category");
 
-            return category; // повертаємо оновлений об’єкт
+            return category; 
         }
 
 
