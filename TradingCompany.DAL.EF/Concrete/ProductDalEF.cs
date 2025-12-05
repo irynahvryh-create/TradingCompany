@@ -35,11 +35,11 @@ namespace TradingCompany.DAL.EF.Concrete
         {
             using (var context = CreateContext())
             {
-                var entity = _mapper.Map<Models.Product>(product); // DTO → Entity
+                var entity = _mapper.Map<Models.Product>(product); 
                 context.Products.Add(entity);
                 context.SaveChanges();
 
-                return _mapper.Map<Product>(entity); // Повертаємо DTO
+                return _mapper.Map<Product>(entity); 
             }
         }
 
@@ -61,7 +61,7 @@ namespace TradingCompany.DAL.EF.Concrete
             using (var context = CreateContext())
             {
                 var entities = context.Products.ToList();
-                return _mapper.Map<List<Product>>(entities); // Entity → DTO
+                return _mapper.Map<List<Product>>(entities); 
              }
 
 
@@ -72,7 +72,7 @@ namespace TradingCompany.DAL.EF.Concrete
             using (var context = CreateContext())
             {
                 var entity = context.Products.Find(id);
-                return entity == null ? null : _mapper.Map<Product>(entity); // Entity → DTO
+                return entity == null ? null : _mapper.Map<Product>(entity); 
             }
         }
 

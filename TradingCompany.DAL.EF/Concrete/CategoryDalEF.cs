@@ -43,13 +43,44 @@ namespace TradingCompany.DAL.EF.Concrete
             }
         }
 
+        //public bool Delete(int id)
+        //{
+        //   using (var context = CreateContext())
+        //    {
+        //        var category = context.Categories.Find(id);
+        //        if (category == null) return false;
+        //        context.Categories.Remove(category);
+        //        context.SaveChanges();
+        //        return true;
+        //    }
+        //}
+
         public bool Delete(int id)
         {
-           using (var context = CreateContext())
+            using (var context = CreateContext())
             {
-                var category = context.Categories.Find(id);
-                if (category == null) return false;
+                // Знаходимо категорію
+                var category = context.Categories
+                    .Include(c => c.Products)  // включаємо продукти
+                    .FirstOrDefault(c => c.CategoryId == id);
+
+                if (category == null)
+                    return false;
+
+                // Якщо є продукти — робимо їх неактивними
+                if (category.Products != null && category.Products.Any())
+                {
+                    foreach (var product in category.Products)
+                    {
+                        product.CategoryId = null; // відв’язати
+                        product.Status = false;    // зробити неактивним
+                    }
+                }
+
+                // Видаляємо категорію
                 context.Categories.Remove(category);
+
+                // Зберігаємо
                 context.SaveChanges();
                 return true;
             }
