@@ -31,7 +31,7 @@ namespace TradingCompany.BL.Concrete
                 return false;
             }
 
-            // Отримуємо користувача з усіма привілеями
+            
             var user = _userDal.GetUserByLogin(username);
             CurrentUser = user;
             CurrentUserChanged?.Invoke();
