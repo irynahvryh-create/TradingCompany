@@ -60,10 +60,10 @@ namespace TradingCompany.WPF.Windows
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Приховуємо поточне вікно, щоб MainWindow не закрив додаток
+            
             this.Hide();
 
-            // Відкриваємо вікно вибору сутності
+           
             var selectionWindow = App.Services.GetRequiredService<EntitySelectionWindow>();
             bool? result = selectionWindow.ShowDialog();
 
@@ -90,7 +90,7 @@ namespace TradingCompany.WPF.Windows
                 }
             }
 
-            // Після повернення з вибору сутності показуємо поточне вікно назад
+            
             this.Show();
         }
 

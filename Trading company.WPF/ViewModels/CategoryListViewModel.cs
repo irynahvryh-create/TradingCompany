@@ -18,7 +18,7 @@ namespace TradingCompany.WPF.ViewModels
         public ICollectionView CategoriesView { get; private set; }
         public Category? SelectedCategory { get; set; }
 
-        // Команди для кнопок
+        // 
         public ICommand DeleteCategoryCommand { get; }
 
         public CategoryListViewModel(ICategoryManager categoryManager, IAuthManager authManager)
@@ -26,7 +26,7 @@ namespace TradingCompany.WPF.ViewModels
             _categoryManager = categoryManager ?? throw new ArgumentNullException(nameof(categoryManager));
             _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
 
-            // Команда видалення з перевіркою прав
+            
             DeleteCategoryCommand = new RelayCommand(
                 _ => DeleteSelectedCategory(),
                 _ => _authManager.CurrentUser != null && _authManager.IsAdmin(_authManager.CurrentUser)
@@ -42,7 +42,6 @@ namespace TradingCompany.WPF.ViewModels
             Refresh();
         }
 
-        // Властивість для прив'язки IsEnabled у UI (альтернатива команді)
         public bool CanDelete => _authManager.CurrentUser != null && _authManager.IsAdmin(_authManager.CurrentUser);
 
         // Фільтр для DataGrid
@@ -69,7 +68,7 @@ namespace TradingCompany.WPF.ViewModels
             }
         }
 
-        // Оновлення колекції
+        
         public void Refresh()
         {
             Categories = new ObservableCollection<Category>(_categoryManager.GetAllCategories());
@@ -78,14 +77,14 @@ namespace TradingCompany.WPF.ViewModels
             OnPropertyChanged(nameof(Categories));
         }
 
-        // Видалення категорії з перевіркою прав
+        
         public bool DeleteSelectedCategory()
         {
             if (SelectedCategory == null) return false;
 
             if (_authManager.CurrentUser == null || !_authManager.IsAdmin(_authManager.CurrentUser))
             {
-                // Користувач не має прав → нічого не робимо
+                
                 return false;
             }
 
