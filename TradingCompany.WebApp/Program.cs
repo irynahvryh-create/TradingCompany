@@ -10,15 +10,26 @@ using TradingCompany.DAL.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+
+// Створюємо папку Logs, якщо її немає
+var logFolder = Path.Combine(AppContext.BaseDirectory, "Logs");
+if (!Directory.Exists(logFolder))
+{
+    Directory.CreateDirectory(logFolder);
+}
+
 // -----------------------------
 // LOGGING
 // -----------------------------
-//builder.Services.AddLogging(loggingBuilder =>
-//{
-//    loggingBuilder.ClearProviders();
-//    loggingBuilder.SetMinimumLevel(LogLevel.Debug);
-//    loggingBuilder.AddLog4Net("log4net.xml");
-//});
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.ClearProviders();
+    loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+    loggingBuilder.AddLog4Net("log4net.xml");
+});
 
 // -----------------------------
 // AutoMapper

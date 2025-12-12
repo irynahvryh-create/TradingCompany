@@ -18,4 +18,10 @@
     <ProjectReference Include="..\TradingCompany.DTO\TradingCompany.DTO.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<None Include="log4net.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
