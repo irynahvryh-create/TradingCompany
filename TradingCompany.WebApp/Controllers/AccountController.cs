@@ -55,7 +55,7 @@ namespace TradingCompany.WebApp.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // 🔥 Якщо ReturnUrl був переданий — повертаємо на нього
+            //  Якщо ReturnUrl був переданий — повертаємо на нього
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 

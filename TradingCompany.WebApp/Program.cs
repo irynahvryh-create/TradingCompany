@@ -41,6 +41,7 @@ builder.Services.AddSingleton<IMapper>(sp =>
         cfg.AddProfile<Category_Map>();
         cfg.AddProfile<User_Map>();
         cfg.AddProfile<Privilege_Map>();
+        cfg.AddProfile<TradingCompany.WebApp.MappingProfiles.EditCategoryModelProfile>();
     });
 
     return config.CreateMapper();

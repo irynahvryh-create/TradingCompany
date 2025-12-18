@@ -1,83 +1,129 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TradingCompany.BL.Interfaces;
 using TradingCompany.DTO;
+using TradingCompany.WebApp.Models;
 
 namespace TradingCompany.WebApp.Controllers
-
 {
-    [Authorize] // тільки для залогінених користувачів
+    [Authorize]
     public class CategoryController : Controller
     {
-        private readonly ICategoryManager _categoryManager;
+        private readonly ICategoryManager _manager;
+        private readonly IMapper _mapper;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryManager categoryManager)
+        public CategoryController(
+            ICategoryManager manager,
+            IMapper mapper,
+            ILogger<CategoryController> logger)
         {
-            _categoryManager = categoryManager;
+            _manager = manager;
+            _mapper = mapper;
+            _logger = logger;
         }
 
-        // -------------------------
-        // Список категорій
-        // -------------------------
+        // GET: Category
         public IActionResult Index()
         {
-            var categories = _categoryManager.GetAllCategories();
+            var categories = _manager.GetAllCategories();
             return View(categories);
         }
 
-        // -------------------------
-        // Створення категорії
-        // -------------------------
-
+        // GET: Category/Create
         [Authorize(Roles = "Admin")]
-        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new EditCategoryModel());
         }
 
+        // POST: Category/Create
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult Create(Category category)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EditCategoryModel model)
         {
-            if (!ModelState.IsValid)
-                return View(category);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
 
-            _categoryManager.CreateCategory(category);
-            return RedirectToAction("Index");
+                var category = _mapper.Map<Category>(model);
+                _manager.CreateCategory(category);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Помилка створення категорії");
+                return View(model);
+            }
         }
 
-        // -------------------------
-        // Редагування категорії
-        // -------------------------
+        // GET: Category/Edit/5
         [Authorize(Roles = "Admin")]
-        [HttpGet]
         public IActionResult Edit(int id)
         {
-            var category = _categoryManager.GetCategoryById(id);
-            if (category == null) return NotFound();
-            return View(category);
+            var category = _manager.GetCategoryById(id);
+            if (category == null)
+                return NotFound();
+
+            var model = _mapper.Map<EditCategoryModel>(category);
+            return View(model);
         }
 
+        // POST: Category/Edit
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult Edit(Category category)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditCategoryModel model)
         {
-            if (!ModelState.IsValid)
-                return View(category);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
 
-            _categoryManager.UpdateCategory(category);
-            return RedirectToAction("Index");
+                var category = _mapper.Map<Category>(model);
+                _manager.UpdateCategory(category);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Помилка редагування категорії");
+                return View(model);
+            }
         }
 
-        // -------------------------
-        // Видалення категорії
-        // -------------------------
+        // GET: Category/Delete/5
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            _categoryManager.DeleteCategory(id);
-            return RedirectToAction("Index");
+            var category = _manager.GetCategoryById(id);
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+        // POST: Category/Delete
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                _manager.DeleteCategory(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Помилка видалення категорії");
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
+
 }
