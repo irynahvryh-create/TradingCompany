@@ -8,10 +8,10 @@ namespace TradingCompany.WebApp.MappingProfiles
     {
         public EditCategoryModelProfile()
         {
-            // DTO → ViewModel (для показу у формі)
+            // DTO → ViewModel 
             CreateMap<Category, EditCategoryModel>();
 
-            // ViewModel → DTO (після сабміту форми)
+            // ViewModel → DTO 
             CreateMap<EditCategoryModel, Category>();
         }
     }
